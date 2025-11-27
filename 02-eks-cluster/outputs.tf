@@ -33,3 +33,27 @@ output "eks_cluster_arn" {
 output "eks_cluster_security_group" {
   value = aws_eks_cluster.this.vpc_config[0].cluster_security_group_id
 }
+
+# DNS Configuration Outputs - OPCIONAL
+# Comentado para manter configuração da apresentação
+/*
+output "route53_zone_id" {
+  value       = aws_route53_zone.this.zone_id
+  description = "Route 53 Hosted Zone ID"
+}
+
+output "route53_name_servers" {
+  value       = aws_route53_zone.this.name_servers
+  description = "Name servers to configure in your domain registrar (RegistroBR)"
+}
+
+output "custom_domain" {
+  value       = var.custom_domain
+  description = "Custom domain configured for the cluster"
+}
+
+output "eks_subdomain_url" {
+  value       = "https://eks.${var.custom_domain}"
+  description = "EKS application URL"
+}
+*/

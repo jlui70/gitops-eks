@@ -1,3 +1,7 @@
+# EXTERNAL DNS HELM CHART - OPCIONAL
+# Comentado para manter configuração da apresentação
+/*
+# External DNS Helm Chart
 resource "helm_release" "external_dns" {
   name             = "external-dns"
   repository       = "https://kubernetes-sigs.github.io/external-dns/"
@@ -6,9 +10,29 @@ resource "helm_release" "external_dns" {
   namespace        = "external-dns"
   create_namespace = true
 
-  set {
+  set = {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = aws_iam_role.external_dns.arn
+  }
+
+  set = {
+    name  = "provider"
+    value = "aws"
+  }
+
+  set = {
+    name  = "aws.region"
+    value = var.region
+  }
+
+  set = {
+    name  = "domainFilters[0]"
+    value = var.custom_domain
+  }
+
+  set = {
+    name  = "policy"
+    value = "sync"
   }
 
   depends_on = [
@@ -17,3 +41,4 @@ resource "helm_release" "external_dns" {
     aws_eks_access_policy_association.bash_user,
   ]
 }
+*/

@@ -8,9 +8,9 @@ variable "assume_role" {
     external_id = string
   })
 
-  default = {
-    role_arn    = "<YOUR_ROLE>"
-    external_id = "<YOUR_EXTERNAL_ID>"
+   default = {
+    role_arn    = "arn:aws:iam::620958830769:role/terraform-role"
+    external_id = "3b94ec31-9d0d-4b22-9bce-72b6ab95fe1a"
   }
 }
 
@@ -21,7 +21,7 @@ variable "tags" {
   })
 
   default = {
-    Project     = "eks-express",
+    Project     = "eks-devopsproject",
     Environment = "production"
   }
 }
@@ -45,7 +45,7 @@ variable "waf" {
   })
 
   default = {
-    name  = "waf-eks-express-webacl"
+    name  = "waf-eks-devopsproject-webacl"
     scope = "REGIONAL"
     custom_response_body = {
       key          = "403-CustomForbiddenResponse"
@@ -54,7 +54,7 @@ variable "waf" {
     }
     visibility_config = {
       cloudwatch_metrics_enabled = true
-      metric_name                = "waf-eks-express-webacl-metrics"
+      metric_name                = "waf-eks-devopsproject-webacl-metrics"
       sampled_requests_enabled   = true
     }
   }

@@ -8,9 +8,9 @@ variable "assume_role" {
     external_id = string
   })
 
-  default = {
-    role_arn    = "<YOUR_ROLE>"
-    external_id = "<YOUR_EXTERNAL_ID>"
+   default = {
+    role_arn    = "arn:aws:iam::620958830769:role/terraform-role"
+    external_id = "3b94ec31-9d0d-4b22-9bce-72b6ab95fe1a"
   }
 }
 
@@ -21,7 +21,7 @@ variable "tags" {
   })
 
   default = {
-    Project     = "eks-express",
+    Project     = "eks-devopsproject",
     Environment = "production"
   }
 }
@@ -57,14 +57,14 @@ variable "vpc" {
   })
 
   default = {
-    name                     = "eks-express-vpc"
+    name                     = "eks-devopsproject-vpc"
     cidr_block               = "10.0.0.0/24"
     internet_gateway_name    = "internet-gateway"
     public_route_table_name  = "public-route-table"
     private_route_table_name = "private-route-table"
     nat_gateway_name         = "nat-gateway"
     eip_name                 = "nat-gateway-eip"
-    eks_cluster_name_tag     = "eks-express-cluster"
+    eks_cluster_name_tag     = "eks-devopsproject-cluster"
     public_subnets = [{
       name                    = "public-subnet-us-east-1a"
       cidr_block              = "10.0.0.0/27"

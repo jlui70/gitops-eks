@@ -2,7 +2,7 @@ resource "aws_prometheus_scraper" "this" {
   source {
     eks {
       cluster_arn = local.eks_cluster_arn
-      subnet_ids  = data.aws_subnets.observability.ids
+      subnet_ids  = data.aws_subnets.eks_private.ids
     }
   }
 

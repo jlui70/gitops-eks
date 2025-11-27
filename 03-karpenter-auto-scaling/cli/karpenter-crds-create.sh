@@ -1,19 +1,15 @@
 #!/bin/bash
 
-function enableKubernetesClusterConnection(){
-    aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
-}
+# Script para aplicar CRDs do Karpenter
+# Versão: 1.0
 
-function installKarpenterCustomResourceDefinitions(){
-    kubectl create -f \
-        "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.sh_nodepools.yaml"
-    
-    kubectl create -f \
-        "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml"
-    
-    kubectl create -f \
-        "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.sh_nodeclaims.yaml"
-}
+set -e
 
-enableKubernetesClusterConnection
-installKarpenterCustomResourceDefinitions
+echo "📦 Aplicando Karpenter CRDs..."
+
+# Aplicar CRDs do Karpenter v1.5.0
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.sh_nodepools.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter-provider-aws/v1.5.0/pkg/apis/crds/karpenter.sh_nodeclaims.yaml
+
+echo "✅ Karpenter CRDs aplicados com sucesso!"

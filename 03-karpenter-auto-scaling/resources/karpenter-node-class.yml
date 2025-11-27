@@ -3,12 +3,12 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
-  role: eks-express-node-group-role
+  role: eks-devopsproject-node-group-role
   amiSelectorTerms:
     - alias: "al2023@latest"
   subnetSelectorTerms:
     - tags:
-        karpenter.sh/discovery: "eks-express-cluster"
+        karpenter.sh/discovery: "eks-devopsproject-cluster"
   securityGroupSelectorTerms:
     - tags:
-        karpenter.sh/discovery: "eks-express-cluster"
+        karpenter.sh/discovery: "eks-devopsproject-cluster"

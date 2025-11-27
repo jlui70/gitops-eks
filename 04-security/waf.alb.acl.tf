@@ -40,13 +40,20 @@ resource "aws_wafv2_web_acl" "this" {
     priority = 2
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAmazonIpReputationList"
         vendor_name = "AWS"
+        
+        rule_action_override {
+          action_to_use {
+            count {}
+          }
+          name = "AWSManagedIPReputationList"
+        }
       }
     }
 
@@ -62,14 +69,27 @@ resource "aws_wafv2_web_acl" "this" {
     priority = 3
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
-
+        
+        rule_action_override {
+          action_to_use {
+            count {}
+          }
+          name = "AnonymousIPList"
+        }
+        
+        rule_action_override {
+          action_to_use {
+            count {}
+          }
+          name = "HostingProviderIPList"
+        }
       }
     }
 
@@ -180,12 +200,7 @@ resource "aws_wafv2_web_acl" "this" {
     priority = 99
 
     action {
-      block {
-        custom_response {
-          response_code            = 403
-          custom_response_body_key = "403-CustomForbiddenResponse"
-        }
-      }
+      count {}
     }
 
     statement {

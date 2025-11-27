@@ -9,8 +9,8 @@ variable "assume_role" {
   })
 
   default = {
-    role_arn    = "<YOUR_ROLE>"
-    external_id = "<YOUR_EXTERNAL_ID>"
+    role_arn    = "arn:aws:iam::620958830769:role/terraform-role"
+    external_id = "3b94ec31-9d0d-4b22-9bce-72b6ab95fe1a"
   }
 }
 
@@ -21,7 +21,7 @@ variable "tags" {
   })
 
   default = {
-    Project     = "eks-express",
+    Project     = "eks-devopsproject",
     Environment = "production"
   }
 }

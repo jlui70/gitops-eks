@@ -1,5 +1,5 @@
 resource "aws_iam_role" "grafana" {
-  name = "EKSExpressGrafanaWorkspaceRole"
+  name = "EKSDevopsprojectGrafanaWorkspaceRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

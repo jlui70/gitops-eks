@@ -1,3 +1,7 @@
+# EXTERNAL DNS IAM - OPCIONAL
+# Comentado para manter configuração da apresentação
+/*
+# IAM Role para External DNS
 resource "aws_iam_role" "external_dns" {
   name = "external-dns-irsa-role"
 
@@ -19,6 +23,7 @@ resource "aws_iam_role" "external_dns" {
   })
 }
 
+# IAM Policy para External DNS
 resource "aws_iam_policy" "external_dns" {
   name        = "AllowExternalDNSUpdates"
   description = "IAM policy for AWS External DNS"
@@ -43,7 +48,9 @@ resource "aws_iam_policy" "external_dns" {
   })
 }
 
+# Attach policy to role
 resource "aws_iam_role_policy_attachment" "external_dns" {
   policy_arn = aws_iam_policy.external_dns.arn
   role       = aws_iam_role.external_dns.name
 }
+*/

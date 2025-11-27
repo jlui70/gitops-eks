@@ -6,9 +6,15 @@
 **/.terraform/*
 **/node_modules/*
 **/outputs.json
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+# Backup files
+*.backup
+*.bkp
+**/backups/
 
 # Crash log files
 crash.log

@@ -3,7 +3,7 @@ resource "aws_cloudwatch_log_group" "prometheus" {
 }
 
 resource "aws_prometheus_workspace" "this" {
-  alias = "eks-express-prometheus"
+  alias = "eks-devopsproject-prometheus"
   logging_configuration {
     log_group_arn = "${aws_cloudwatch_log_group.prometheus.arn}:*"
   }

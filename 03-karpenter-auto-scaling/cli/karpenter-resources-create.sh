@@ -1,19 +1,16 @@
 #!/bin/bash
 
-function enableKubernetesClusterConnection(){
-    aws eks update-kubeconfig --region $REGION --name $CLUSTER_NAME
-}
+# Script para aplicar recursos do Karpenter (NodePool e EC2NodeClass)
+# Versão: 1.0
 
-function replaceKarpenterPlaceholders(){
-   sed -i "s|\${CLUSTER_NAME}|$CLUSTER_NAME|g" ./resources/karpenter-node-class.yml
-   sed -i "s|\${KARPENTER_NODE_ROLE}|$KARPENTER_NODE_ROLE|g" ./resources/karpenter-node-class.yml
-}
+set -e
 
-function CreateKarpenterResources(){
-    kubectl apply -f ./resources/karpenter-node-class.yml
-    kubectl apply -f ./resources/karpenter-node-pool.yml
-}
+echo "📦 Aplicando Karpenter Resources (NodePool + EC2NodeClass)..."
 
-enableKubernetesClusterConnection
-replaceKarpenterPlaceholders
-CreateKarpenterResources
+# Aplicar NodePool
+kubectl apply -f resources/karpenter-node-pool.yml
+
+# Aplicar EC2NodeClass
+kubectl apply -f resources/karpenter-node-class.yml
+
+echo "✅ Karpenter Resources aplicados com sucesso!"

@@ -1,7 +1,7 @@
 data "aws_subnets" "observability" {
   filter {
     name   = "tag:Project"
-    values = ["eks-express"]
+    values = ["eks-devopsproject"]
   }
 
   filter {
