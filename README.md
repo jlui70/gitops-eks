@@ -14,6 +14,49 @@ Este projeto inclui:
 
 ---
 
+## 🆕 Novidade: Integração com Ansible
+
+Este projeto foi expandido com **documentação completa** para integração com **Ansible**, automatizando a configuração de serviços após o deployment Terraform.
+
+### **📚 Documentação Ansible Disponível:**
+
+1. **[ANALISE-ANSIBLE-INTEGRACAO.md](./ANALISE-ANSIBLE-INTEGRACAO.md)**  
+   - Análise técnica completa das 5 áreas onde Ansible agrega valor
+   - Práticas de mercado (Netflix, Spotify, Airbnb)
+   - ROI e estimativa de esforço
+
+2. **[GUIA-IMPLEMENTACAO-ANSIBLE.md](./GUIA-IMPLEMENTACAO-ANSIBLE.md)**  
+   - Código pronto para uso (roles, playbooks)
+   - Setup passo a passo
+   - Exemplos práticos
+
+3. **[RESUMO-EXECUTIVO-ALUNOS.md](./RESUMO-EXECUTIVO-ALUNOS.md)**  
+   - Material didático para estudantes
+   - Conceitos fundamentais (Terraform vs Ansible)
+   - Casos de uso reais
+
+4. **[ROTEIRO-APRESENTACAO-AULA.md](./ROTEIRO-APRESENTACAO-AULA.md)**  
+   - Roteiro de aula completo (90 minutos)
+   - Demos práticas
+   - Exercícios hands-on
+
+5. **[INDICE-DOCUMENTACAO.md](./INDICE-DOCUMENTACAO.md)**  
+   - Índice geral de toda documentação
+   - Fluxo de leitura recomendado
+
+### **🎯 Benefícios da Integração Ansible:**
+
+| Tarefa | Sem Ansible | Com Ansible | Economia |
+|--------|-------------|-------------|----------|
+| Configurar Grafana | 15-20 min (manual) | 2 min (automático) | **90%** |
+| Deploy sample apps | 10 min (manual) | 1 min (automático) | **90%** |
+| Validação cluster | 15 min (manual) | 1 min (automático) | **93%** |
+| **3 ambientes completos** | **~10 horas** | **~2.5 horas** | **75%** |
+
+**👉 Para começar com Ansible, leia:** [INDICE-DOCUMENTACAO.md](./INDICE-DOCUMENTACAO.md)
+
+---
+
 ## 📋 Pré-requisitos
 
 Antes de iniciar o deployment, certifique-se de ter:
