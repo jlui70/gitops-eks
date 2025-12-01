@@ -523,10 +523,10 @@ Configure Amazon Managed Prometheus e Amazon Managed Grafana para monitorar o Cl
 **ANTES DE APLICAR:**
 
 1. Verifique se `05-monitoring/data.cluster.remote-state.tf` usa o bucket correto com seu Account ID
-2. Se não tiver AWS SSO configurado, certifique-se que `05-monitoring/grafana.workspace.tf` use:
-   ```hcl
-   authentication_providers = ["SAML"]  # ou ["AWS_SSO"] se tiver SSO
-   ```
+2. O arquivo `05-monitoring/grafana.workspace.tf` já está configurado com `authentication_providers = ["AWS_SSO"]`
+   - ✅ **AWS_SSO é RECOMENDADO** (gratuito, integrado com AWS)
+   - ⚠️ Se você usa IdP externo (Okta, Azure AD), altere para `["SAML"]` e configure federation metadata após o deploy
+3. Após o `terraform apply`, você **deve** configurar o acesso ao Grafana (ver seção "Configuração do Grafana" abaixo)
 
 ```bash
 cd ../05-monitoring
@@ -551,27 +551,7 @@ Você receberá:
 - `prometheus_workspace_id`: ID do workspace Prometheus
 - `grafana_api_key`: API Key para automação Ansible (sensitive)
 
-**⚠️ PRÓXIMO PASSO OBRIGATÓRIO:** Configurar acesso ao Grafana (ver seção "Configuração do Grafana" abaixo)
-
----
-
-## ✅ Configuração do Grafana - ANTES DE CONTINUAR
-
-**IMPORTANTE:** Após aplicar a Stack 05, você **DEVE** configurar o acesso ao Grafana antes de usar. O workspace é criado vazio.
-
-**Você tem 2 opções:**
-
-### **Opção A: Configuração Automática com Ansible (RECOMENDADA - 2 minutos)**
-1. Configure acesso SSO (Passos 1-5 da seção "Configuração do Grafana" abaixo)
-2. Execute: `cd ansible && ansible-playbook playbooks/01-configure-grafana.yml`
-3. ✅ Data Source + Dashboard configurados automaticamente
-
-### **Opção B: Configuração Manual (10-15 minutos)**
-1. Configure acesso SSO (Passos 1-5)
-2. Configure Data Source Prometheus manualmente (Passo 7)
-3. Importe Dashboard Node Exporter manualmente (Passo 8)
-
-**👉 Veja instruções detalhadas na seção "Configuração do Grafana" mais abaixo.**
+**⚠️ PRÓXIMO PASSO OBRIGATÓRIO:** Vá para a seção "📊 Configuração do Grafana" mais abaixo antes de usar o Grafana
 
 ---
 
@@ -780,47 +760,43 @@ terraform destroy -auto-approve
 
 ---
 
-## 📊 Configuração do Grafana (Stack 05)
+## 📊 Configuração do Grafana
 
-> ✅ **AUTOMAÇÃO ANSIBLE DISPONÍVEL:** Este projeto inclui automação Ansible que configura o Grafana automaticamente (Data Source + Dashboards). 
-> 
-> Você tem **2 opções**:
-> - **Opção 1 (RECOMENDADA):** Configurar SSO + Executar Ansible (2 minutos) → Veja seção "Configuração Automatizada com Ansible" abaixo
-> - **Opção 2 (Manual):** Configurar SSO + Data Source + Dashboards manualmente (10-15 minutos) → Veja passos 1-8 abaixo
+**⚠️ OBRIGATÓRIO:** Após aplicar a Stack 05, o Grafana Workspace é criado **vazio** e **sem acesso configurado**. Você deve seguir esta seção para configurar autenticação e dashboards.
 
----
+### Visão Geral do Processo
 
-## 🤖 Configuração Automatizada com Ansible (RECOMENDADA)
-
-### Pré-requisitos
-1. Stack 05 (Monitoring) já aplicada com API Key (ver seção "Stack 05" acima)
-2. Ansible instalado (ver [QUICK-START-ANSIBLE.md](./docs/QUICK-START-ANSIBLE.md))
-3. Usuário SSO com permissão ADMIN no Grafana (ver Passos 1-5 abaixo)
-
-### Execução
-```bash
-# 1. Primeiro, configure o acesso SSO (Passos 1-5 abaixo)
-# 2. Depois, execute o Ansible para configurar tudo automaticamente:
-
-cd ansible
-ansible-playbook playbooks/01-configure-grafana.yml
-
-# Output esperado:
-# ✅ Data Source Prometheus configurado
-# ✅ Dashboard Node Exporter Full importado
-# ✅ Grafana pronto para uso
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ ETAPA 1: Configurar Autenticação SSO (OBRIGATÓRIA)             │
+│ ⏱️ Tempo: 5-10 minutos                                          │
+├─────────────────────────────────────────────────────────────────┤
+│ 1. Habilitar IAM Identity Center (SSO)                          │
+│ 2. Criar usuário SSO                                            │
+│ 3. Atribuir usuário ao Grafana Workspace                        │
+│ 4. Promover usuário para ADMIN (crítico!)                       │
+│ 5. Acessar Grafana via AWS Access Portal                        │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│ ETAPA 2: Configurar Data Source + Dashboards                   │
+│ Escolha UMA das opções abaixo:                                  │
+├─────────────────────────────────────────────────────────────────┤
+│ OPÇÃO A (RECOMENDADA): Ansible Automation                      │
+│ ⏱️ Tempo: 2 minutos                                             │
+│ ✅ Data Source Prometheus configurado automaticamente           │
+│ ✅ Dashboard Node Exporter importado automaticamente            │
+├─────────────────────────────────────────────────────────────────┤
+│ OPÇÃO B: Configuração Manual                                   │
+│ ⏱️ Tempo: 10-15 minutos                                         │
+│ ⚙️ Configurar Data Source Prometheus manualmente                │
+│ ⚙️ Importar Dashboard 1860 (Node Exporter Full) manualmente     │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-**Tempo:** 2 minutos  
-**Resultado:** Grafana 100% configurado automaticamente
-
 ---
 
-## 🔧 Configuração Manual (Alternativa)
-
-### Pré-requisitos
-
-Após fazer o deploy da Stack 05 (Monitoring), você precisará configurar o acesso ao Grafana manualmente via AWS SSO.
+## ETAPA 1: Configurar Autenticação SSO (Obrigatória para Ambas Opções)
 
 ### Passo 1: Habilitar AWS IAM Identity Center (SSO)
 
@@ -897,84 +873,83 @@ Prometheus Endpoint: https://aps-workspaces.us-east-1.amazonaws.com/workspaces/w
 
 ---
 
-### ✅ Checkpoint: Acesso SSO Configurado
+### ✅ Checkpoint: Autenticação SSO Configurada
 
-Neste ponto você tem:
+**Parabéns!** Você completou a ETAPA 1. Agora você tem:
 - ✅ IAM Identity Center (SSO) habilitado
 - ✅ Usuário SSO criado e verificado
-- ✅ Usuário atribuído ao Grafana Workspace
-- ✅ Permissão ADMIN configurada
+- ✅ Usuário atribuído ao Grafana Workspace com permissão ADMIN
+- ✅ Acesso ao Grafana via AWS Access Portal
 
-**Próximos passos:**
-- **Opção A (RECOMENDADA):** Executar `ansible-playbook playbooks/01-configure-grafana.yml` para configuração automática
-- **Opção B (Manual):** Seguir Passos 6-8 abaixo para configuração manual
+**🎯 Próximo Passo:** Configure o Grafana com Ansible (automação)
 
 ---
 
-### Passo 6: Acessar o Grafana
+## ETAPA 2: Configuração Automática com Ansible ⭐
 
-1. Acesse o **AWS Access Portal** (você recebeu por e-mail ou encontre em IAM Identity Center)
-   - Formato: `https://d-xxxxxxxxxx.awsapps.com/start`
-2. Faça login com o usuário SSO criado
-3. Você verá um card **"Amazon Managed Grafana"**
-4. Clique nele para acessar o Grafana
+**⏱️ Tempo:** 2 minutos  
+**📋 Pré-requisitos:**
+- ✅ ETAPA 1 completa (SSO configurado com usuário ADMIN)
+- ✅ Ansible instalado (ver [QUICK-START-ANSIBLE.md](./docs/QUICK-START-ANSIBLE.md))
 
-### Passo 7: Configurar Data Source Prometheus (MANUAL)
+**🚀 Execução:**
 
-> 💡 **DICA:** Se você executou o Ansible (Opção A), **pule este passo** - o Data Source já está configurado automaticamente.
-
-**Obter endpoint do Prometheus** (execute antes de configurar):
 ```bash
-cd 05-monitoring
-terraform output -raw prometheus_workspace_endpoint
+cd ansible
+ansible-playbook playbooks/01-configure-grafana.yml
 ```
 
-**Dentro do Grafana:**
+**✅ Resultado esperado:**
+```
+PLAY RECAP *********************************************************************
+localhost : ok=3 changed=2 unreachable=0 failed=0
 
-1. **Menu lateral** → **Connections** → **Data sources**
-2. Clique em **"Add data source"**
-3. Selecione **"Prometheus"**
-4. Configure:
-   ```
-   Name: Prometheus
-   
-   URL: <COLE_AQUI_O_ENDPOINT_DO_PROMETHEUS>
-   ```
-   **Exemplo:**
-   ```
-   URL: https://aps-workspaces.us-east-1.amazonaws.com/workspaces/ws-12345678-abcd-1234-efgh-123456789012
-   ```
-   > ⚠️ **ATENÇÃO:** Cole o endpoint **exatamente** como retornado pelo `terraform output` (sem barra `/` no final)
+✅ Data Source Prometheus configurado automaticamente
+✅ Dashboard Node Exporter Full (ID 1860) importado automaticamente
+✅ Grafana 100% pronto para uso
+```
 
-5. **Auth**: Marque **☑ SigV4 auth**
-6. **SigV4 Auth Details**:
-   - **Authentication Provider**: `Workspace IAM Role`
-   - **Default Region**: `us-east-1`
-   - **Service**: `aps`
-7. Role até o final e clique em **"Save & test"**
-8. Deve aparecer: ✅ **"Successfully queried the Prometheus API."**
+**🎉 Pronto!** Prossiga para a "Validação Final" abaixo.
 
-### Passo 8: Importar Dashboard Node Exporter (MANUAL)
+---
 
-> 💡 **DICA:** Se você executou o Ansible (Opção A), **pule este passo** - o Dashboard já está importado automaticamente.
+### 🔧 Preferiu Configurar Manualmente?
 
-1. **Menu lateral** → **Dashboards**
-2. Clique em **"New"** → **"Import"**
-3. Digite o ID: **1860**
-4. Clique em **"Load"**
-5. Clique em **"Import"** (o data source Prometheus será selecionado automaticamente)
+Se você **não pode** usar Ansible ou quer entender o processo passo a passo:
 
-> 📝 **Nota:** Para o dashboard 1860 (Node Exporter Full), após clicar em "Load", o Grafana detecta automaticamente o data source Prometheus configurado no Passo 7. Não é necessário selecionar manualmente.
+📖 **Guia Completo:** [CONFIGURACAO-MANUAL-GRAFANA.md](./docs/CONFIGURACAO-MANUAL-GRAFANA.md)
 
-🎉 **Pronto!** Agora você tem:
-- ✅ Dashboard Node Exporter Full funcionando
-- ✅ Métricas de CPU, Memória, Disco, Rede dos nodes
-- ✅ Grafana com autenticação SSO
-- ✅ Monitoramento completo do cluster
+**Tempo estimado:** 10-15 minutos (vs 2 minutos com Ansible)
 
-### Métricas Disponíveis no Dashboard
+O guia manual inclui:
+- Passo a passo detalhado para configurar Data Source Prometheus
+- Instruções para importar Dashboard Node Exporter (ID 1860)
+- Troubleshooting de erros comuns
+- Queries PromQL para testes
 
-O **Node Exporter Full** mostra:
+---
+
+## ✅ Validação Final do Grafana
+
+Após executar o playbook Ansible, valide se tudo está funcionando:
+
+**1. Verificar Data Source:**
+- Menu lateral → **Connections** → **Data sources**
+- Deve aparecer: **Prometheus** (verde, ativo)
+
+**2. Verificar Dashboard:**
+- Menu lateral → **Dashboards**
+- Deve aparecer: **Node Exporter Full**
+- Clique no dashboard e verifique se os gráficos estão mostrando dados
+
+**3. Verificar Métricas:**
+- No dashboard, você deve ver métricas dos 3 nodes do EKS
+- Gráficos de CPU, Memória, Disco devem estar populados com dados
+
+🎉 **Sucesso!** Seu Grafana está 100% configurado e monitorando o cluster!
+
+### 📊 Métricas Disponíveis no Dashboard Node Exporter Full
+
 - 📊 **CPU**: Usage, cores, idle, system, user, iowait
 - 💾 **Memória**: Total, usado, disponível, cache, buffers
 - 💿 **Disco**: I/O read/write, utilização, espaço livre
@@ -1065,13 +1040,21 @@ rate(node_network_receive_bytes_total[5m])
 
 ## 📚 Recursos Adicionais
 
-### Arquivos de Exemplo
+### Testes e Validação
 
-O projeto inclui arquivos de exemplo para testes:
+O projeto inclui arquivos de exemplo (YAML manifests) para validação manual dos componentes:
 
-- **`02-eks-cluster/samples/csi-sample-deployment.yml`**: Deployment de teste com EBS CSI
-- **`02-eks-cluster/samples/ingress-sample-deployment.yml`**: Deployment nginx com Ingress e ALB
-- **`03-karpenter-auto-scaling/samples/karpenter-nginx-deployment.yml`**: Deployment para testar Karpenter auto-scaling
+📖 **Guia Completo de Testes:** [TESTES-VALIDACAO-MANUAL.md](./docs/TESTES-VALIDACAO-MANUAL.md)
+
+O guia inclui:
+- ✅ Validação de EBS CSI Driver (Persistent Volumes)
+- ✅ Validação de ALB Ingress Controller + WAF
+- ✅ Validação de Karpenter Auto-Scaling
+- ✅ Validação de External DNS
+- ✅ Validação de Prometheus Node Exporter
+- 📊 Checklist completo de validação
+
+> 💡 **Dica:** Para ambientes de produção, considere automatizar estes testes com Ansible ou CI/CD pipelines ao invés de executá-los manualmente.
 
 ### Comandos Úteis
 
