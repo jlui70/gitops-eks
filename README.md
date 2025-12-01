@@ -207,47 +207,44 @@ aws sts get-caller-identity --profile terraform
 
 ## 🔧 Substituições Necessárias nos Arquivos
 
-### 5.1. Substituir Account ID em TODOS os arquivos
+### 5.1. Substituir `<YOUR_ACCOUNT>` pelo seu Account ID
 
-**CRÍTICO:** Substitua `620958830769` pelo ID da sua conta AWS em **todos** os arquivos `.tf`:
+**CRÍTICO:** Todos os arquivos `.tf` contêm o placeholder `<YOUR_ACCOUNT>` que **deve** ser substituído pelo ID da sua conta AWS.
+
+#### **Obter seu Account ID:**
+
+```bash
+aws sts get-caller-identity --query Account --output text --profile terraform
+```
+
+Anote o número retornado (ex: `123456789012`).
 
 #### 🐧 **(WSL/Linux)**
 
 ```bash
 find . -type f -name "*.tf" -exec sed -i \
-    's|620958830769|<YOUR_ACCOUNT>|g' {} +
+    's|<YOUR_ACCOUNT>|123456789012|g' {} +
 ```
 
 #### 🍎 **(MacOS)**
 
 ```bash
 find . -type f -name "*.tf" -exec sed -i '' \
-    's|620958830769|<YOUR_ACCOUNT>|g' {} +
+    's|<YOUR_ACCOUNT>|123456789012|g' {} +
 ```
+
+> ⚠️ **ATENÇÃO:** Substitua `123456789012` pelo seu Account ID real obtido no comando acima.
+
+**O que será substituído:**
+- ✅ IAM Role ARN: `arn:aws:iam::<YOUR_ACCOUNT>:role/terraform-role`
+- ✅ Bucket S3: `eks-devopsproject-state-files-<YOUR_ACCOUNT>`
+- ✅ EKS Access entries (cluster admin)
+
+**Total:** 16 ocorrências em 10 arquivos `.tf`
 
 ---
 
-### 5.2. Atualizar Nome do Bucket S3 Backend
-
-O nome do bucket S3 precisa ser **único globalmente** e incluir o ID da sua conta:
-
-#### 🐧 **(WSL/Linux)**
-
-```bash
-find . -type f -name "*.tf" -exec sed -i \
-    's|eks-devopsproject-state-files-620958830769|eks-devopsproject-state-files-<YOUR_ACCOUNT>|g' {} +
-```
-
-#### 🍎 **(MacOS)**
-
-```bash
-find . -type f -name "*.tf" -exec sed -i '' \
-    's|eks-devopsproject-state-files-620958830769|eks-devopsproject-state-files-<YOUR_ACCOUNT>|g' {} +
-```
-
----
-
-### 5.3. Configurar Usuário IAM no locals.tf (Stack 02)
+### 5.2. Configurar Usuário IAM no locals.tf (Stack 02)
 
 **OBRIGATÓRIO:** Edite o arquivo `02-eks-cluster/locals.tf` e substitua o nome do usuário IAM:
 
@@ -265,7 +262,7 @@ Substitua:
 
 ---
 
-### 5.4. Adicionar terraform-role ao EKS Access (Stack 02)
+### 5.3. Adicionar terraform-role ao EKS Access (Stack 02)
 
 **CRÍTICO:** O arquivo `02-eks-cluster/eks.cluster.access.tf` **deve** conter o access entry para a terraform-role, caso contrário `kubectl` não funcionará:
 

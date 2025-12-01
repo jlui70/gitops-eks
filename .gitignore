@@ -52,7 +52,10 @@ terraform.rc
 
 # Documentation privada (local only)
 docs/
+docs internos/
 RESUMO-VALIDACAO-GITHUB.md
+README copy.md
+*copy.md
 
 # Ansible sensitive files
 ansible/inventory/production.yml
