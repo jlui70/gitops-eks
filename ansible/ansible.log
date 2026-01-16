@@ -41827,3 +41827,1672 @@ setting deprecation_warnings=False in ansible.cfg.
   msg: "========================================\n✅ GRAFANA CONFIGURADO COM SUCESSO\n========================================\n\n\U0001F4CA Data Source: Prometheus\n\U0001F4C8 Dashboard 1860: Importado\n\U0001F310 URL: https://g-97013666db.grafana-workspace.us-east-1.amazonaws.com/\n\n========================================"
 2025-12-02 15:08:45,619 p=91927 u=luiz7 n=ansible | PLAY RECAP ************************************************************************************************************************
 2025-12-02 15:08:45,620 p=91927 u=luiz7 n=ansible | localhost                  : ok=12   changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2026-01-16 09:56:52,927 p=55067 u=luiz7 n=ansible | [DEPRECATION WARNING]: [defaults]collections_paths option, does not fit var naming 
+standard, use the singular form collections_path instead. This feature will be removed from
+ ansible-core in version 2.19. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2026-01-16 09:56:53,768 p=55067 u=luiz7 n=ansible | PLAY [Validação completa do Cluster EKS] ***************************************************
+2026-01-16 09:56:53,786 p=55067 u=luiz7 n=ansible | TASK [Verificar kubectl disponível] ********************************************************
+2026-01-16 09:56:54,403 p=55067 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:56:54,406 p=55067 u=luiz7 n=ansible | TASK [Validar kubeconfig existe] ***********************************************************
+2026-01-16 09:56:54,804 p=55067 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:56:54,814 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [INFRA] Obter informações dos nodes] ****************************
+2026-01-16 09:56:58,492 p=55067 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:56:58,497 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [INFRA] Validar nodes estão Ready] ******************************
+2026-01-16 09:56:58,586 p=55067 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-121.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.121
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-013ae0026351f2fca"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:03Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1b
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-121.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1b
+        topology.k8s.aws/zone-id: use1-az1
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1b
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:53:24Z'
+      name: ip-10-0-1-121.ec2.internal
+      resourceVersion: '5009'
+      uid: 63385201-6b63-42e3-89e3-98dddfcf13ba
+    spec:
+      providerID: aws:///us-east-1b/i-013ae0026351f2fca
+    status:
+      addresses:
+      - address: 10.0.1.121
+        type: InternalIP
+      - address: ip-10-0-1-121.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-121.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:53:24Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:24Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:24Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:24Z'
+        lastTransitionTime: '2026-01-16T12:38:17Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner@sha256:8831312a1e339fbe667e84a81fd391c7412e034fcfd53ee8f8bf3beb55d1486d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.1.0-eksbuild.2
+        sizeBytes: 42252936
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter@sha256:1cb5d892c006fcfb7212dd6291ecabf19e558a40c505545c1847a15b5523dd05
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.4.0-eksbuild.3
+        sizeBytes: 40278726
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer@sha256:d5ad882449800381269418e0661172c8afde7434ce834f22a12716576cbfb734
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.0.0-eksbuild.3
+        sizeBytes: 40179904
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher@sha256:b38f42b735d237b01a29bc0a483a8d3c7965defa4eeb65629c97538006c311d0
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.10.0-eksbuild.3
+        sizeBytes: 40101593
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - public.ecr.aws/eks/aws-load-balancer-controller@sha256:52d691e2eb750c0c9d3f11e0e65e24f76c32fea775f8fe002eeb6c066f34f616
+        - public.ecr.aws/eks/aws-load-balancer-controller:v2.13.0
+        sizeBytes: 26333073
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server@sha256:35a610b1d615d61bc8babaf40f5b5118d85150c84635cf96cf42356dc304aa40
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.0-eksbuild.6
+        sizeBytes: 22627655
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns@sha256:f184e31683ba315cb284bb6b429d416ecee71126ee1d9035af8d15462064e0b8
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.11.4-eksbuild.2
+        sizeBytes: 22037887
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 0bb9aadb-6903-4ec0-8462-3d4a8a4aeef7
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec29a447d888c7c4d67866130fedad1c
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec29a447-d888-c7c4-d678-66130fedad1c
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-121.ec2.internal está Ready
+2026-01-16 09:56:58,602 p=55067 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-34.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.34
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-032b5218af30607b4"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:03Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1a
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-34.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1a
+        topology.k8s.aws/zone-id: use1-az6
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1a
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:54:53Z'
+      name: ip-10-0-1-34.ec2.internal
+      resourceVersion: '5374'
+      uid: 6bcc58ff-a904-4bb8-8527-fab6fc34471c
+    spec:
+      providerID: aws:///us-east-1a/i-032b5218af30607b4
+    status:
+      addresses:
+      - address: 10.0.1.34
+        type: InternalIP
+      - address: ip-10-0-1-34.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-34.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:15Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner@sha256:8831312a1e339fbe667e84a81fd391c7412e034fcfd53ee8f8bf3beb55d1486d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.1.0-eksbuild.2
+        sizeBytes: 42252936
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter@sha256:1cb5d892c006fcfb7212dd6291ecabf19e558a40c505545c1847a15b5523dd05
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.4.0-eksbuild.3
+        sizeBytes: 40278726
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer@sha256:d5ad882449800381269418e0661172c8afde7434ce834f22a12716576cbfb734
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.0.0-eksbuild.3
+        sizeBytes: 40179904
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher@sha256:b38f42b735d237b01a29bc0a483a8d3c7965defa4eeb65629c97538006c311d0
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.10.0-eksbuild.3
+        sizeBytes: 40101593
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns@sha256:f184e31683ba315cb284bb6b429d416ecee71126ee1d9035af8d15462064e0b8
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.11.4-eksbuild.2
+        sizeBytes: 22037887
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 71e08dce-25c0-42b4-b2b4-2479f3692013
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec219239c8b44a88575fed60a71fb945
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec219239-c8b4-4a88-575f-ed60a71fb945
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-34.ec2.internal está Ready
+2026-01-16 09:56:58,617 p=55067 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-8.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.8
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-0e8010827f5e0f82f"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:05Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1a
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-8.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1a
+        topology.k8s.aws/zone-id: use1-az6
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1a
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:53:22Z'
+      name: ip-10-0-1-8.ec2.internal
+      resourceVersion: '4997'
+      uid: 40f1a319-1d47-400f-868b-4ee90452d51a
+    spec:
+      providerID: aws:///us-east-1a/i-0e8010827f5e0f82f
+    status:
+      addresses:
+      - address: 10.0.1.8
+        type: InternalIP
+      - address: ip-10-0-1-8.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-8.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:53:22Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:22Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:22Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:53:22Z'
+        lastTransitionTime: '2026-01-16T12:38:19Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - public.ecr.aws/eks/aws-load-balancer-controller@sha256:52d691e2eb750c0c9d3f11e0e65e24f76c32fea775f8fe002eeb6c066f34f616
+        - public.ecr.aws/eks/aws-load-balancer-controller:v2.13.0
+        sizeBytes: 26333073
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server@sha256:35a610b1d615d61bc8babaf40f5b5118d85150c84635cf96cf42356dc304aa40
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.0-eksbuild.6
+        sizeBytes: 22627655
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 3173c174-6466-4cc3-bdfb-7b602084b68b
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec2cc69eef05e20f4c133bb5a89aaef0
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec2cc69e-ef05-e20f-4c13-3bb5a89aaef0
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-8.ec2.internal está Ready
+2026-01-16 09:56:58,622 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [NETWORK] Validar ALB Controller] *******************************
+2026-01-16 09:57:05,451 p=55067 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:57:05,454 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [NETWORK] Verificar ALB Controller Running] *********************
+2026-01-16 09:57:05,505 p=55067 u=luiz7 n=ansible | ok: [localhost] => changed=false 
+  msg: '✅ ALB Controller: 2/2 replicas'
+2026-01-16 09:57:05,508 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [KARPENTER] Validar Karpenter Controller] ***********************
+2026-01-16 09:57:07,690 p=55067 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:57:07,692 p=55067 u=luiz7 n=ansible | TASK [cluster-validation : [KARPENTER] Verificar Karpenter Running] ************************
+2026-01-16 09:57:07,739 p=55067 u=luiz7 n=ansible | fatal: [localhost]: FAILED! => changed=false 
+  assertion: karpenter_pods.resources | length > 0
+  evaluated_to: false
+  msg: Assertion failed
+2026-01-16 09:57:07,741 p=55067 u=luiz7 n=ansible | PLAY RECAP *********************************************************************************
+2026-01-16 09:57:07,741 p=55067 u=luiz7 n=ansible | localhost                  : ok=7    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2026-01-16 09:59:07,487 p=55643 u=luiz7 n=ansible | [DEPRECATION WARNING]: [defaults]collections_paths option, does not fit var naming 
+standard, use the singular form collections_path instead. This feature will be removed from
+ ansible-core in version 2.19. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2026-01-16 09:59:08,000 p=55643 u=luiz7 n=ansible | PLAY [Validação completa do Cluster EKS] ***************************************************
+2026-01-16 09:59:08,009 p=55643 u=luiz7 n=ansible | TASK [Verificar kubectl disponível] ********************************************************
+2026-01-16 09:59:08,563 p=55643 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:08,565 p=55643 u=luiz7 n=ansible | TASK [Validar kubeconfig existe] ***********************************************************
+2026-01-16 09:59:08,938 p=55643 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:08,943 p=55643 u=luiz7 n=ansible | TASK [cluster-validation : [INFRA] Obter informações dos nodes] ****************************
+2026-01-16 09:59:12,921 p=55643 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:12,929 p=55643 u=luiz7 n=ansible | TASK [cluster-validation : [INFRA] Validar nodes estão Ready] ******************************
+2026-01-16 09:59:13,036 p=55643 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-121.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.121
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-013ae0026351f2fca"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:03Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1b
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-121.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1b
+        topology.k8s.aws/zone-id: use1-az1
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1b
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:58:30Z'
+      name: ip-10-0-1-121.ec2.internal
+      resourceVersion: '6275'
+      uid: 63385201-6b63-42e3-89e3-98dddfcf13ba
+    spec:
+      providerID: aws:///us-east-1b/i-013ae0026351f2fca
+    status:
+      addresses:
+      - address: 10.0.1.121
+        type: InternalIP
+      - address: ip-10-0-1-121.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-121.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:58:30Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:30Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:30Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:30Z'
+        lastTransitionTime: '2026-01-16T12:38:17Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner@sha256:8831312a1e339fbe667e84a81fd391c7412e034fcfd53ee8f8bf3beb55d1486d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.1.0-eksbuild.2
+        sizeBytes: 42252936
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter@sha256:1cb5d892c006fcfb7212dd6291ecabf19e558a40c505545c1847a15b5523dd05
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.4.0-eksbuild.3
+        sizeBytes: 40278726
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer@sha256:d5ad882449800381269418e0661172c8afde7434ce834f22a12716576cbfb734
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.0.0-eksbuild.3
+        sizeBytes: 40179904
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher@sha256:b38f42b735d237b01a29bc0a483a8d3c7965defa4eeb65629c97538006c311d0
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.10.0-eksbuild.3
+        sizeBytes: 40101593
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - public.ecr.aws/eks/aws-load-balancer-controller@sha256:52d691e2eb750c0c9d3f11e0e65e24f76c32fea775f8fe002eeb6c066f34f616
+        - public.ecr.aws/eks/aws-load-balancer-controller:v2.13.0
+        sizeBytes: 26333073
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server@sha256:35a610b1d615d61bc8babaf40f5b5118d85150c84635cf96cf42356dc304aa40
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.0-eksbuild.6
+        sizeBytes: 22627655
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns@sha256:f184e31683ba315cb284bb6b429d416ecee71126ee1d9035af8d15462064e0b8
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.11.4-eksbuild.2
+        sizeBytes: 22037887
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 0bb9aadb-6903-4ec0-8462-3d4a8a4aeef7
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec29a447d888c7c4d67866130fedad1c
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec29a447-d888-c7c4-d678-66130fedad1c
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-121.ec2.internal está Ready
+2026-01-16 09:59:13,056 p=55643 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-34.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.34
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-032b5218af30607b4"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:03Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1a
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-34.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1a
+        topology.k8s.aws/zone-id: use1-az6
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1a
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:03Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:04Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:54:53Z'
+      name: ip-10-0-1-34.ec2.internal
+      resourceVersion: '5374'
+      uid: 6bcc58ff-a904-4bb8-8527-fab6fc34471c
+    spec:
+      providerID: aws:///us-east-1a/i-032b5218af30607b4
+    status:
+      addresses:
+      - address: 10.0.1.34
+        type: InternalIP
+      - address: ip-10-0-1-34.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-34.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:00Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:54:53Z'
+        lastTransitionTime: '2026-01-16T12:38:15Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner@sha256:8831312a1e339fbe667e84a81fd391c7412e034fcfd53ee8f8bf3beb55d1486d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.1.0-eksbuild.2
+        sizeBytes: 42252936
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter@sha256:1cb5d892c006fcfb7212dd6291ecabf19e558a40c505545c1847a15b5523dd05
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.4.0-eksbuild.3
+        sizeBytes: 40278726
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer@sha256:d5ad882449800381269418e0661172c8afde7434ce834f22a12716576cbfb734
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.0.0-eksbuild.3
+        sizeBytes: 40179904
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher@sha256:b38f42b735d237b01a29bc0a483a8d3c7965defa4eeb65629c97538006c311d0
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.10.0-eksbuild.3
+        sizeBytes: 40101593
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns@sha256:f184e31683ba315cb284bb6b429d416ecee71126ee1d9035af8d15462064e0b8
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.11.4-eksbuild.2
+        sizeBytes: 22037887
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 71e08dce-25c0-42b4-b2b4-2479f3692013
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec219239c8b44a88575fed60a71fb945
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec219239-c8b4-4a88-575f-ed60a71fb945
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-34.ec2.internal está Ready
+2026-01-16 09:59:13,069 p=55643 u=luiz7 n=ansible | ok: [localhost] => (item=ip-10-0-1-8.ec2.internal) => changed=false 
+  ansible_loop_var: item
+  item:
+    apiVersion: v1
+    kind: Node
+    metadata:
+      annotations:
+        alpha.kubernetes.io/provided-node-ip: 10.0.1.8
+        csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-0e8010827f5e0f82f"}'
+        node.alpha.kubernetes.io/ttl: '0'
+        volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+      creationTimestamp: '2026-01-16T12:38:05Z'
+      labels:
+        beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/instance-type: t3.medium
+        beta.kubernetes.io/os: linux
+        eks.amazonaws.com/capacityType: ON_DEMAND
+        eks.amazonaws.com/nodegroup: eks-devopsproject-node-group
+        eks.amazonaws.com/nodegroup-image: ami-0c36593324eefbffb
+        failure-domain.beta.kubernetes.io/region: us-east-1
+        failure-domain.beta.kubernetes.io/zone: us-east-1a
+        k8s.io/cloud-provider-aws: 0099b503ba02288cad44a36d6bdb4d66
+        kubernetes.io/arch: amd64
+        kubernetes.io/hostname: ip-10-0-1-8.ec2.internal
+        kubernetes.io/os: linux
+        node.kubernetes.io/instance-type: t3.medium
+        topology.ebs.csi.aws.com/zone: us-east-1a
+        topology.k8s.aws/zone-id: use1-az6
+        topology.kubernetes.io/region: us-east-1
+        topology.kubernetes.io/zone: us-east-1a
+      managedFields:
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:labels:
+              f:beta.kubernetes.io/instance-type: {}
+              f:failure-domain.beta.kubernetes.io/region: {}
+              f:failure-domain.beta.kubernetes.io/zone: {}
+              f:k8s.io/cloud-provider-aws: {}
+              f:node.kubernetes.io/instance-type: {}
+              f:topology.k8s.aws/zone-id: {}
+              f:topology.kubernetes.io/region: {}
+              f:topology.kubernetes.io/zone: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:status:
+            f:addresses:
+              k:{"type":"InternalDNS"}:
+                .: {}
+                f:address: {}
+                f:type: {}
+        manager: aws-cloud-controller-manager
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:node.alpha.kubernetes.io/ttl: {}
+        manager: kube-controller-manager
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:alpha.kubernetes.io/provided-node-ip: {}
+              f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+            f:labels:
+              .: {}
+              f:beta.kubernetes.io/arch: {}
+              f:beta.kubernetes.io/os: {}
+              f:eks.amazonaws.com/capacityType: {}
+              f:eks.amazonaws.com/nodegroup: {}
+              f:eks.amazonaws.com/nodegroup-image: {}
+              f:kubernetes.io/arch: {}
+              f:kubernetes.io/hostname: {}
+              f:kubernetes.io/os: {}
+          f:spec:
+            f:providerID: {}
+        manager: kubelet
+        operation: Update
+        time: '2026-01-16T12:38:05Z'
+      - apiVersion: v1
+        fieldsType: FieldsV1
+        fieldsV1:
+          f:metadata:
+            f:annotations:
+              f:csi.volume.kubernetes.io/nodeid: {}
+            f:labels:
+              f:topology.ebs.csi.aws.com/zone: {}
+          f:status:
+            f:conditions:
+              k:{"type":"DiskPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"MemoryPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"PIDPressure"}:
+                f:lastHeartbeatTime: {}
+              k:{"type":"Ready"}:
+                f:lastHeartbeatTime: {}
+                f:lastTransitionTime: {}
+                f:message: {}
+                f:reason: {}
+                f:status: {}
+            f:images: {}
+        manager: kubelet
+        operation: Update
+        subresource: status
+        time: '2026-01-16T12:58:27Z'
+      name: ip-10-0-1-8.ec2.internal
+      resourceVersion: '6259'
+      uid: 40f1a319-1d47-400f-868b-4ee90452d51a
+    spec:
+      providerID: aws:///us-east-1a/i-0e8010827f5e0f82f
+    status:
+      addresses:
+      - address: 10.0.1.8
+        type: InternalIP
+      - address: ip-10-0-1-8.ec2.internal
+        type: InternalDNS
+      - address: ip-10-0-1-8.ec2.internal
+        type: Hostname
+      allocatable:
+        cpu: 1930m
+        ephemeral-storage: '18181869946'
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3376720Ki
+        pods: '17'
+      capacity:
+        cpu: '2'
+        ephemeral-storage: 20893676Ki
+        hugepages-1Gi: '0'
+        hugepages-2Mi: '0'
+        memory: 3931728Ki
+        pods: '17'
+      conditions:
+      - lastHeartbeatTime: '2026-01-16T12:58:27Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has sufficient memory available
+        reason: KubeletHasSufficientMemory
+        status: 'False'
+        type: MemoryPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:27Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has no disk pressure
+        reason: KubeletHasNoDiskPressure
+        status: 'False'
+        type: DiskPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:27Z'
+        lastTransitionTime: '2026-01-16T12:38:01Z'
+        message: kubelet has sufficient PID available
+        reason: KubeletHasSufficientPID
+        status: 'False'
+        type: PIDPressure
+      - lastHeartbeatTime: '2026-01-16T12:58:27Z'
+        lastTransitionTime: '2026-01-16T12:38:19Z'
+        message: kubelet is posting ready status
+        reason: KubeletReady
+        status: 'True'
+        type: Ready
+      daemonEndpoints:
+        kubeletEndpoint:
+          Port: 10250
+      images:
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init@sha256:4cc269e566688eeabf7f59533ffcc8ddb629d4956e1963b704052bfec70a9b46
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.20.4-eksbuild.2
+        sizeBytes: 70445438
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni@sha256:23f64d454047173490658c5866bca1a68d1b3c11df4248b2c837253d933fd150
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.20.4-eksbuild.2
+        sizeBytes: 53394093
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy@sha256:e5393142290f37eef09af851890bdb2586ddab4dd8d4ddb70af7880bcc413e2e
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.32.6-minimal-eksbuild.8
+        sizeBytes: 47726397
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver@sha256:94623106c14baff8f4fa4195d6b67c71109477abad3b706a01833937025e1ca4
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.54.0
+        sizeBytes: 36201507
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent@sha256:f99fb1fea5e16dc3a2429ddd0a2660d0f3b4ba40b467e81e1898b001ee54c240
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.2.7-eksbuild.1
+        sizeBytes: 35997169
+      - names:
+        - public.ecr.aws/eks/aws-load-balancer-controller@sha256:52d691e2eb750c0c9d3f11e0e65e24f76c32fea775f8fe002eeb6c066f34f616
+        - public.ecr.aws/eks/aws-load-balancer-controller:v2.13.0
+        sizeBytes: 26333073
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server@sha256:35a610b1d615d61bc8babaf40f5b5118d85150c84635cf96cf42356dc304aa40
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.0-eksbuild.6
+        sizeBytes: 22627655
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe@sha256:fd1cc767dc7ded68c7892cdd3489937e4476075e94c90c91841b2df275267110
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.17.0-eksbuild.3
+        sizeBytes: 16739468
+      - names:
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar@sha256:f3da14588f791123c69b25dd32d9a2aac6456123a6ef747fdec033ccd67f6a1d
+        - 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.15.0-eksbuild.3
+        sizeBytes: 16612087
+      - names:
+        - 602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/pause:3.10
+        - localhost/kubernetes/pause:latest
+        sizeBytes: 318731
+      nodeInfo:
+        architecture: amd64
+        bootID: 3173c174-6466-4cc3-bdfb-7b602084b68b
+        containerRuntimeVersion: containerd://2.1.5
+        kernelVersion: 6.1.159-181.297.amzn2023.x86_64
+        kubeProxyVersion: v1.32.9-eks-ecaa3a6
+        kubeletVersion: v1.32.9-eks-ecaa3a6
+        machineID: ec2cc69eef05e20f4c133bb5a89aaef0
+        operatingSystem: linux
+        osImage: Amazon Linux 2023.10.20260105
+        systemUUID: ec2cc69e-ef05-e20f-4c13-3bb5a89aaef0
+      runtimeHandlers:
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: ''
+      - features:
+          recursiveReadOnlyMounts: true
+          userNamespaces: true
+        name: runc
+  msg: ✅ Node ip-10-0-1-8.ec2.internal está Ready
+2026-01-16 09:59:13,075 p=55643 u=luiz7 n=ansible | TASK [cluster-validation : [NETWORK] Validar ALB Controller] *******************************
+2026-01-16 09:59:20,519 p=55643 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:20,522 p=55643 u=luiz7 n=ansible | TASK [cluster-validation : [NETWORK] Verificar ALB Controller Running] *********************
+2026-01-16 09:59:20,572 p=55643 u=luiz7 n=ansible | ok: [localhost] => changed=false 
+  msg: '✅ ALB Controller: 2/2 replicas'
+2026-01-16 09:59:20,576 p=55643 u=luiz7 n=ansible | TASK [cluster-validation : Gerar relatório] ************************************************
+2026-01-16 09:59:20,623 p=55643 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: "========================================\n✅ CLUSTER VALIDADO COM SUCESSO\n========================================\n\n\U0001F4CA Nodes: 3 Ready\n\U0001F310 ALB Controller: Running\n\n========================================"
+2026-01-16 09:59:20,628 p=55643 u=luiz7 n=ansible | TASK [✅ Validação concluída] **************************************************************
+2026-01-16 09:59:20,645 p=55643 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: Cluster está saudável!
+2026-01-16 09:59:20,648 p=55643 u=luiz7 n=ansible | PLAY RECAP *********************************************************************************
+2026-01-16 09:59:20,648 p=55643 u=luiz7 n=ansible | localhost                  : ok=8    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2026-01-16 09:59:31,045 p=55866 u=luiz7 n=ansible | [DEPRECATION WARNING]: [defaults]collections_paths option, does not fit var naming 
+standard, use the singular form collections_path instead. This feature will be removed from
+ ansible-core in version 2.19. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+2026-01-16 09:59:31,624 p=55866 u=luiz7 n=ansible | PLAY [Deploy E-commerce Microservices Application] *****************************************
+2026-01-16 09:59:31,679 p=55866 u=luiz7 n=ansible | TASK [Gathering Facts] *********************************************************************
+2026-01-16 09:59:36,089 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:36,108 p=55866 u=luiz7 n=ansible | TASK [Verificar se kubectl está disponível] ************************************************
+2026-01-16 09:59:36,638 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:36,648 p=55866 u=luiz7 n=ansible | TASK [Exibir versão do kubectl] ************************************************************
+2026-01-16 09:59:36,672 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: |-
+    ✅ clientVersion:
+      buildDate: "2024-08-13T07:37:34Z"
+      compiler: gc
+      gitCommit: 9edcffcde5595e8a5b1a35f88c421764e575afce
+      gitTreeState: clean
+      gitVersion: v1.31.0
+      goVersion: go1.22.5
+      major: "1"
+      minor: "31"
+      platform: linux/amd64
+    kustomizeVersion: v5.4.2
+2026-01-16 09:59:36,680 p=55866 u=luiz7 n=ansible | TASK [Testar conectividade com cluster] ****************************************************
+2026-01-16 09:59:38,978 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:38,988 p=55866 u=luiz7 n=ansible | TASK [Exibir informações do cluster] *******************************************************
+2026-01-16 09:59:39,011 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ Cluster acessível
+2026-01-16 09:59:39,046 p=55866 u=luiz7 n=ansible | TASK [🔍 Verificar AWS Load Balancer Controller] *******************************************
+2026-01-16 09:59:41,595 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:41,604 p=55866 u=luiz7 n=ansible | TASK [Validar presença do ALB Controller] **************************************************
+2026-01-16 09:59:41,652 p=55866 u=luiz7 n=ansible | ok: [localhost] => changed=false 
+  msg: ✅ AWS Load Balancer Controller ativo
+2026-01-16 09:59:41,683 p=55866 u=luiz7 n=ansible | TASK [📦 Criar namespace ecommerce] ********************************************************
+2026-01-16 09:59:44,776 p=55866 u=luiz7 n=ansible | changed: [localhost]
+2026-01-16 09:59:44,784 p=55866 u=luiz7 n=ansible | TASK [Exibir status do namespace] **********************************************************
+2026-01-16 09:59:44,805 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ Namespace 'ecommerce' criado
+2026-01-16 09:59:44,813 p=55866 u=luiz7 n=ansible | TASK [Listar manifestos disponíveis] *******************************************************
+2026-01-16 09:59:45,254 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 09:59:45,264 p=55866 u=luiz7 n=ansible | TASK [Exibir manifestos encontrados] *******************************************************
+2026-01-16 09:59:45,310 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: "\U0001F4C4 Encontrados 7 manifestos para deploy"
+2026-01-16 09:59:45,317 p=55866 u=luiz7 n=ansible | TASK [Aplicar manifestos dos microserviços] ************************************************
+2026-01-16 09:59:48,286 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=order-management.yaml)
+2026-01-16 09:59:51,349 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=team-contact-support.yaml)
+2026-01-16 09:59:54,688 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=product-inventory.yaml)
+2026-01-16 09:59:58,011 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=profile-management.yaml)
+2026-01-16 10:00:00,904 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=product-catalog.yaml)
+2026-01-16 10:00:03,748 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=ecommerce-ui.yaml)
+2026-01-16 10:00:06,791 p=55866 u=luiz7 n=ansible | changed: [localhost] => (item=shipping-and-handling.yaml)
+2026-01-16 10:00:06,809 p=55866 u=luiz7 n=ansible | TASK [Resumo dos deployments] **************************************************************
+2026-01-16 10:00:06,916 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ 7 recursos criados/atualizados
+2026-01-16 10:00:06,927 p=55866 u=luiz7 n=ansible | TASK [⏳ Aguardar pods ficarem prontos (até 300s)] *****************************************
+2026-01-16 10:01:09,456 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:01:09,557 p=55866 u=luiz7 n=ansible | TASK [Exibir status dos pods] **************************************************************
+2026-01-16 10:01:09,581 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ Todos os pods estão prontos
+2026-01-16 10:01:09,590 p=55866 u=luiz7 n=ansible | TASK [Listar pods em execução] *************************************************************
+2026-01-16 10:01:12,455 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:01:12,474 p=55866 u=luiz7 n=ansible | TASK [Exibir pods] *************************************************************************
+2026-01-16 10:01:12,523 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg:
+  - NAME                                     READY   STATUS    RESTARTS   AGE   IP           NODE                         NOMINATED NODE   READINESS GATES
+  - contact-support-team-5994b9df87-rz2lr    1/1     Running   0          82s   10.0.1.12    ip-10-0-1-8.ec2.internal     <none>           <none>
+  - ecommerce-ui-885d9c485-bfdfh             1/1     Running   0          69s   10.0.1.19    ip-10-0-1-34.ec2.internal    <none>           <none>
+  - order-management-548fc9f65c-4zt96        1/1     Running   0          85s   10.0.1.61    ip-10-0-1-34.ec2.internal    <none>           <none>
+  - product-catalog-64fbd65d58-895r9         1/1     Running   0          72s   10.0.1.122   ip-10-0-1-121.ec2.internal   <none>           <none>
+  - product-inventory-5bd688f46-dbbh5        1/1     Running   0          79s   10.0.1.25    ip-10-0-1-34.ec2.internal    <none>           <none>
+  - profile-management-55c6595b8d-smbz5      1/1     Running   0          75s   10.0.1.62    ip-10-0-1-8.ec2.internal     <none>           <none>
+  - shipping-and-handling-77ff6d4bf9-2w77r   1/1     Running   0          66s   10.0.1.57    ip-10-0-1-8.ec2.internal     <none>           <none>
+2026-01-16 10:01:12,544 p=55866 u=luiz7 n=ansible | TASK [🌐 Deploy do Ingress (Application Load Balancer)] ************************************
+2026-01-16 10:01:16,041 p=55866 u=luiz7 n=ansible | changed: [localhost]
+2026-01-16 10:01:16,052 p=55866 u=luiz7 n=ansible | TASK [Exibir status do Ingress] ************************************************************
+2026-01-16 10:01:16,077 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ Ingress criado
+2026-01-16 10:01:16,087 p=55866 u=luiz7 n=ansible | TASK [⏳ Aguardar provisionamento do ALB (até 300s)] ***************************************
+2026-01-16 10:01:40,326 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:01:40,341 p=55866 u=luiz7 n=ansible | TASK [Exibir URL do ALB] *******************************************************************
+2026-01-16 10:01:40,378 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg:
+  - ✅ ALB provisionado com sucesso!
+  - "\U0001F4CD URL: http://k8s-ecommerc-ecommerc-f905cb5bda-1744867819.us-east-1.elb.amazonaws.com"
+2026-01-16 10:01:40,392 p=55866 u=luiz7 n=ansible | TASK [🔒 Obter ARN do WAF WebACL] **********************************************************
+2026-01-16 10:01:41,240 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:01:41,251 p=55866 u=luiz7 n=ansible | TASK [🔒 Associar WAF ao Ingress] **********************************************************
+2026-01-16 10:01:43,952 p=55866 u=luiz7 n=ansible | changed: [localhost]
+2026-01-16 10:01:43,961 p=55866 u=luiz7 n=ansible | TASK [Exibir status da associação WAF] *****************************************************
+2026-01-16 10:01:43,994 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ WAF associado ao ALB com sucesso!
+2026-01-16 10:01:44,014 p=55866 u=luiz7 n=ansible | TASK [Aguardar DNS do ALB propagar (60s)] **************************************************
+2026-01-16 10:01:44,041 p=55866 u=luiz7 n=ansible | Pausing for 60 seconds
+2026-01-16 10:01:44,042 p=55866 u=luiz7 n=ansible | (ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
+2026-01-16 10:01:44,043 p=55866 u=luiz7 n=ansible | [Aguardar DNS do ALB propagar (60s)]
+⏳ Aguardando DNS do ALB propagar (isso é normal, leva ~60s)...:
+2026-01-16 10:02:44,053 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:02:44,069 p=55866 u=luiz7 n=ansible | TASK [Testar conectividade HTTP] ***********************************************************
+2026-01-16 10:03:31,336 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:03:31,347 p=55866 u=luiz7 n=ansible | TASK [Exibir resultado do health check] ****************************************************
+2026-01-16 10:03:31,371 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg: ✅ Aplicação respondendo (HTTP 200)
+2026-01-16 10:03:31,379 p=55866 u=luiz7 n=ansible | TASK [Obter informações completas do Ingress] **********************************************
+2026-01-16 10:03:34,455 p=55866 u=luiz7 n=ansible | ok: [localhost]
+2026-01-16 10:03:34,469 p=55866 u=luiz7 n=ansible | TASK [📊 Resumo do Deployment] *************************************************************
+2026-01-16 10:03:34,509 p=55866 u=luiz7 n=ansible | ok: [localhost] => 
+  msg:
+  - ╔════════════════════════════════════════════════════════════════╗
+  - ║  ✅ E-COMMERCE APPLICATION - DEPLOY CONCLUÍDO COM SUCESSO     ║
+  - ╚════════════════════════════════════════════════════════════════╝
+  - ''
+  - "\U0001F6CD️  Aplicação: E-commerce Microservices"
+  - "\U0001F4E6 Namespace: ecommerce"
+  - "\U0001F522 Microserviços: 7 deployments + 7 services"
+  - "\U0001F310 Load Balancer: Application Load Balancer (ALB)"
+  - "\U0001F512 WAF: Associado (waf-eks-devopsproject-webacl)"
+  - ''
+  - "\U0001F4CD URLs de Acesso:"
+  - '   • ALB Direto: http://k8s-ecommerc-ecommerc-f905cb5bda-1744867819.us-east-1.elb.amazonaws.com'
+  - '   • DNS Personalizado: http://eks.devopsproject.com.br (configure CNAME)'
+  - ''
+  - "\U0001F4CB Próximos Passos:"
+  - '   1. Configure CNAME no DNS: eks.devopsproject.com.br → k8s-ecommerc-ecommerc-f905cb5bda-1744867819.us-east-1.elb.amazonaws.com'
+  - '   2. Configure Grafana: ansible-playbook playbooks/01-configure-grafana.yml'
+  - '   3. (Opcional) Monitore app: ansible-playbook playbooks/04-configure-ecommerce-monitoring.yml'
+  - ''
+  - "\U0001F50D Comandos Úteis:"
+  - '   • Ver pods:     kubectl get pods -n ecommerce'
+  - '   • Ver services: kubectl get svc -n ecommerce'
+  - '   • Ver ingress:  kubectl get ingress -n ecommerce'
+  - '   • Logs UI:      kubectl logs -f deployment/ecommerce-ui -n ecommerce'
+  - ''
+  - '⏱️  Tempo de Deploy: ~3 minutos (vs 15-20 minutos manual)'
+  - '✨ Economia: ~85% de tempo + zero erros humanos + WAF automático'
+2026-01-16 10:03:34,522 p=55866 u=luiz7 n=ansible | TASK [Salvar informações de acesso] ********************************************************
+2026-01-16 10:03:35,285 p=55866 u=luiz7 n=ansible | changed: [localhost]
+2026-01-16 10:03:35,312 p=55866 u=luiz7 n=ansible | PLAY RECAP *********************************************************************************
+2026-01-16 10:03:35,312 p=55866 u=luiz7 n=ansible | localhost                  : ok=30   changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

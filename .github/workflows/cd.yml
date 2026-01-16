@@ -1,0 +1,188 @@
+name: CD - Deploy to EKS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+      version:
+        description: 'Version tag (default: latest)'
+        required: false
+        default: 'latest'
+      deployment_strategy:
+        description: 'Deployment strategy'
+        required: true
+        default: 'blue-green'
+        type: choice
+        options:
+          - blue-green
+          - rolling
+          - canary
+
+  workflow_run:
+    workflows: ["CI - Build and Test"]
+    types:
+      - completed
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  EKS_CLUSTER_NAME: eks-devopsproject-cluster
+  NAMESPACE: ecommerce
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+
+jobs:
+  deploy:
+    name: Deploy to EKS
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --name ${{ env.EKS_CLUSTER_NAME }} \
+            --region ${{ env.AWS_REGION }}
+          
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set image version
+        id: version
+        run: |
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            echo "tag=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy v2 (Blue/Green Strategy)
+        if: ${{ github.event.inputs.deployment_strategy == 'blue-green' || github.event.inputs.deployment_strategy == '' }}
+        run: |
+          echo "🚀 Starting Blue/Green Deployment..."
+          
+          cd 06-ecommerce-app
+          
+          # Deploy v2 resources
+          echo "📦 Deploying v2 components..."
+          kubectl apply -f manifests-v2/configmap-nginx-v2.yaml
+          kubectl apply -f manifests-v2/ecommerce-ui-backend.yaml
+          kubectl apply -f manifests-v2/ecommerce-ui-v2-proxy.yaml
+          
+          # Wait for v2 to be ready
+          echo "⏳ Waiting for v2 pods..."
+          kubectl wait --for=condition=available --timeout=300s \
+            deployment/ecommerce-ui-v2 -n ${{ env.NAMESPACE }}
+          kubectl wait --for=condition=available --timeout=300s \
+            deployment/ecommerce-ui-backend -n ${{ env.NAMESPACE }}
+          
+          # Health check v2
+          echo "🧪 Health check v2..."
+          sleep 10
+          POD_V2=$(kubectl get pod -n ${{ env.NAMESPACE }} -l version=v2 -o jsonpath='{.items[0].metadata.name}')
+          kubectl exec -n ${{ env.NAMESPACE }} $POD_V2 -- sh -c "wget -qO- http://127.0.0.1:4000/api/version"
+          
+          echo "✅ v2 deployed and healthy!"
+
+      - name: Switch traffic to v2
+        id: switch
+        if: ${{ github.event.inputs.deployment_strategy == 'blue-green' || github.event.inputs.deployment_strategy == '' }}
+        run: |
+          echo "🔄 Switching traffic from v1 to v2..."
+          
+          # Update service selector to point to v2
+          kubectl patch service ecommerce-ui -n ${{ env.NAMESPACE }} \
+            -p '{"spec":{"selector":{"version":"v2"}}}'
+          
+          # Wait for propagation
+          sleep 10
+          
+          echo "✅ Traffic switched to v2!"
+          echo "switched=true" >> $GITHUB_OUTPUT
+
+      - name: Verify deployment
+        run: |
+          echo "🔍 Verifying deployment..."
+          
+          # Check pods
+          kubectl get pods -n ${{ env.NAMESPACE }} -l app=ecommerce-ui -o wide
+          
+          # Check service
+          kubectl get service ecommerce-ui -n ${{ env.NAMESPACE }} -o yaml | grep version
+          
+          # Get Ingress URL
+          ALB_URL=$(kubectl get ingress ecommerce-ingress -n ${{ env.NAMESPACE }} \
+            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          
+          echo "🌐 Application URL: http://$ALB_URL"
+          echo "ALB_URL=$ALB_URL" >> $GITHUB_OUTPUT
+          
+          # Test endpoint
+          echo "🧪 Testing endpoint..."
+          sleep 5
+          curl -s http://$ALB_URL/api/version | jq . || echo "Endpoint test pending..."
+          
+          echo "✅ Deployment verified!"
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ github.event.inputs.environment || 'production' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Strategy:** ${{ github.event.inputs.deployment_strategy || 'blue-green' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Cluster:** ${{ env.EKS_CLUSTER_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Namespace:** ${{ env.NAMESPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Deployment Status" >> $GITHUB_STEP_SUMMARY
+          echo "- v2 Deployed: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Traffic Switched: ${{ steps.switch.outputs.switched == 'true' && '✅' || '⏸️' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Access:** http://eks.devopsproject.com.br" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔄 Rollback" >> $GITHUB_STEP_SUMMARY
+          echo "If needed, run: \`Rollback Deployment\` workflow" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    
+    steps:
+      - name: Deployment notification
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "✅ Deployment successful!"
+            echo "🌐 Application is live at: http://eks.devopsproject.com.br"
+          else
+            echo "❌ Deployment failed!"
+            echo "🔄 Consider running rollback workflow"
+          fi

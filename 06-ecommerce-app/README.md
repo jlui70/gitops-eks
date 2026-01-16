@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Esta stack implementa uma aplicação e-commerce completa com microserviços no cluster EKS existente, **sem necessidade de Istio**. A aplicação utiliza a infraestrutura já provisionada pelas stacks 00-05.
+Esta stack implementa uma aplicação e-commerce completa com microserviços no cluster EKS existente. A aplicação utiliza a infraestrutura já provisionada pelas stacks 00-02.
 
 ## 🏗️ Arquitetura da Aplicação
 
@@ -48,10 +48,10 @@ Esta stack implementa uma aplicação e-commerce completa com microserviços no 
 ## 🚀 Deploy da Aplicação
 
 ### Pré-requisitos
-- ✅ Stacks 00-05 já implementadas
+- ✅ Stacks 00-02 já implementadas
 - ✅ Cluster EKS funcionando
 - ✅ ALB Controller ativo
-- ✅ DNS eks.devopsproject.com.br configurado
+- ✅ DNS (opcional) eks.seudominio.com.br configurado
 
 ### 1. Deploy dos Microserviços
 ```bash
@@ -88,20 +88,10 @@ curl -I http://eks.devopsproject.com.br
 
 ## 🌐 URLs de Acesso
 
-- **E-commerce Frontend**: http://eks.devopsproject.com.br
-- **API Health Check**: http://eks.devopsproject.com.br/api/health
-- **Grafana Monitoring**: https://g-b774166fa1.grafana-workspace.us-east-1.amazonaws.com/
+- **E-commerce Frontend**: http://[ALB-URL] ou http://eks.seudominio.com.br
+- **API Health Check**: http://[ALB-URL]/api/health
 
-## 📊 Monitoramento
-
-A aplicação será automaticamente monitorada pelo Prometheus/Grafana já configurado:
-
-- **Pod Metrics**: CPU, Memória, Status dos pods
-- **Service Metrics**: Latência, throughput das APIs  
-- **MongoDB Metrics**: Conexões, queries, performance
-- **ALB Metrics**: Requests, response times, errors
-
-## 🔧 Comandos Úteis
+##  Comandos Úteis
 
 ### Verificar Status da Aplicação
 ```bash
@@ -189,11 +179,11 @@ kubectl get pv,pvc -n ecommerce
 ## 💰 Custos Adicionais
 
 A aplicação usa a infraestrutura existente, custos adicionais mínimos:
-- **Compute**: Pods usam nodes existentes + auto-scaling
+- **Compute**: Pods usam nodes existentes
 - **Storage**: ~$2/mês para volumes MongoDB
 - **Network**: Tráfego interno gratuito
 
-**Total estimado adicional**: ~$5/mês
+**Total estimado adicional**: ~$2/mês
 
 ## 🎉 Status
 
@@ -201,8 +191,7 @@ A aplicação usa a infraestrutura existente, custos adicionais mínimos:
 ✅ **7 Microserviços**: Ativos  
 ✅ **MongoDB**: Persistência configurada  
 ✅ **ALB Integration**: Funcionando  
-✅ **DNS**: eks.devopsproject.com.br  
-✅ **Monitoring**: Prometheus/Grafana integrado  
+✅ **DNS**: Opcional (eks.seudominio.com.br)  
 
 ---
 

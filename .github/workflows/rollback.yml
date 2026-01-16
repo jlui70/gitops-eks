@@ -1,0 +1,178 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for rollback'
+        required: true
+        type: string
+      target_version:
+        description: 'Target version (v1 or v2)'
+        required: true
+        default: 'v1'
+        type: choice
+        options:
+          - v1
+          - v2
+      cleanup_failed_version:
+        description: 'Delete failed version resources?'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  AWS_REGION: us-east-1
+  EKS_CLUSTER_NAME: eks-devopsproject-cluster
+  NAMESPACE: ecommerce
+
+jobs:
+  rollback:
+    name: Rollback to ${{ github.event.inputs.target_version }}
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --name ${{ env.EKS_CLUSTER_NAME }} \
+            --region ${{ env.AWS_REGION }}
+          
+          kubectl cluster-info
+
+      - name: Pre-rollback status
+        run: |
+          echo "📊 Current deployment status:"
+          kubectl get deployments -n ${{ env.NAMESPACE }} -l app=ecommerce-ui
+          kubectl get pods -n ${{ env.NAMESPACE }} -l app=ecommerce-ui
+          
+          echo ""
+          echo "🔍 Current service routing:"
+          kubectl get service ecommerce-ui -n ${{ env.NAMESPACE }} -o yaml | grep -A 2 selector
+
+      - name: Execute rollback
+        id: rollback
+        run: |
+          echo "⚠️  ROLLBACK INITIATED"
+          echo "Reason: ${{ github.event.inputs.reason }}"
+          echo "Target: ${{ github.event.inputs.target_version }}"
+          echo ""
+          
+          echo "🔄 Switching traffic to ${{ github.event.inputs.target_version }}..."
+          
+          # Update service to point to target version
+          kubectl patch service ecommerce-ui -n ${{ env.NAMESPACE }} \
+            -p "{\"spec\":{\"selector\":{\"version\":\"${{ github.event.inputs.target_version }}\"}}}"
+          
+          # Wait for propagation
+          sleep 10
+          
+          echo "✅ Traffic switched to ${{ github.event.inputs.target_version }}!"
+
+      - name: Verify rollback
+        run: |
+          echo "🔍 Verifying rollback..."
+          
+          # Check service selector
+          echo "Service routing:"
+          kubectl get service ecommerce-ui -n ${{ env.NAMESPACE }} -o yaml | grep -A 2 selector
+          
+          # Check pods
+          echo ""
+          echo "Pods status:"
+          kubectl get pods -n ${{ env.NAMESPACE }} -l app=ecommerce-ui -o wide
+          
+          # Test endpoint
+          echo ""
+          echo "🧪 Testing endpoint..."
+          TARGET_POD=$(kubectl get pod -n ${{ env.NAMESPACE }} \
+            -l version=${{ github.event.inputs.target_version }} \
+            -o jsonpath='{.items[0].metadata.name}')
+          
+          kubectl exec -n ${{ env.NAMESPACE }} $TARGET_POD -- sh -c "wget -qO- http://127.0.0.1:4000/api/version" || true
+          
+          echo ""
+          echo "✅ Rollback verified!"
+
+      - name: Cleanup failed version
+        if: ${{ github.event.inputs.cleanup_failed_version == 'true' }}
+        run: |
+          FAILED_VERSION="v2"
+          if [ "${{ github.event.inputs.target_version }}" == "v2" ]; then
+            FAILED_VERSION="v1"
+          fi
+          
+          echo "🗑️  Cleaning up $FAILED_VERSION resources..."
+          
+          if [ "$FAILED_VERSION" == "v2" ]; then
+            kubectl delete deployment ecommerce-ui-v2 -n ${{ env.NAMESPACE }} --ignore-not-found
+            kubectl delete deployment ecommerce-ui-backend -n ${{ env.NAMESPACE }} --ignore-not-found
+            kubectl delete service ecommerce-ui-v2 -n ${{ env.NAMESPACE }} --ignore-not-found
+            kubectl delete service ecommerce-ui-backend -n ${{ env.NAMESPACE }} --ignore-not-found
+            kubectl delete configmap nginx-v2-config -n ${{ env.NAMESPACE }} --ignore-not-found
+          else
+            kubectl delete deployment ecommerce-ui -n ${{ env.NAMESPACE }} --ignore-not-found
+          fi
+          
+          echo "✅ Cleanup completed!"
+
+      - name: Post-rollback status
+        run: |
+          echo "📊 Post-rollback status:"
+          kubectl get deployments -n ${{ env.NAMESPACE }} -l app=ecommerce-ui
+          kubectl get pods -n ${{ env.NAMESPACE }} -l app=ecommerce-ui
+          
+          echo ""
+          ALB_URL=$(kubectl get ingress ecommerce-ingress -n ${{ env.NAMESPACE }} \
+            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          echo "🌐 Application URL: http://$ALB_URL"
+
+      - name: Rollback summary
+        if: always()
+        run: |
+          echo "## 🔙 Rollback Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Version:** ${{ github.event.inputs.target_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Reason:** ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Executed by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Rollback Status" >> $GITHUB_STEP_SUMMARY
+          echo "- Traffic switched: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Verification: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Cleanup: ${{ github.event.inputs.cleanup_failed_version == 'true' && '✅' || '⏭️ Skipped' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Application:** http://eks.devopsproject.com.br" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    name: Notify Rollback
+    runs-on: ubuntu-latest
+    needs: rollback
+    if: always()
+    
+    steps:
+      - name: Rollback notification
+        run: |
+          if [ "${{ needs.rollback.result }}" == "success" ]; then
+            echo "✅ Rollback to ${{ github.event.inputs.target_version }} successful!"
+            echo "📝 Reason: ${{ github.event.inputs.reason }}"
+          else
+            echo "❌ Rollback failed!"
+            echo "⚠️  Manual intervention may be required"
+          fi

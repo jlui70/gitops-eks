@@ -1,18 +1,15 @@
 #!/bin/bash
 
 # Script para destruir todos os recursos na ordem correta
-# Versão: 3.3
-# Data: 02 de Dezembro de 2025
-# Stacks: 00-backend até 06-ecommerce-app (Terraform + Kubernetes resources)
-# Changelog v3.3: Documentação atualizada (Stack 06 já estava sendo deletada via namespace ecommerce)
-# Changelog v3.2: Limpeza IAM dinâmica (lê nomes do Terraform state - suporta nomes customizados)
-# Changelog v3.1: Limpeza IAM automática (previne erro EntityAlreadyExists)
-# Changelog v3.0: Remoção automática de resources órfãos do state (Stack 04, 03, 02)
+# Versão: 4.0 - Simplificada
+# Data: 16 de Janeiro de 2026
+# Stacks: 00-backend, 01-networking, 02-eks-cluster
+# Changelog v4.0: Removidas stacks 03 (Karpenter), 04 (WAF), 05 (Monitoring)
 
 set -e  # Para em caso de erro
 
 echo "╔══════════════════════════════════════════════════════════════════╗"
-echo "║     🗑️  DESTRUINDO INFRAESTRUTURA EKS - 6 STACKS               ║"
+echo "║     🗑️  DESTRUINDO INFRAESTRUTURA EKS - 3 STACKS               ║"
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""
 
@@ -85,72 +82,9 @@ else
 fi
 echo ""
 
-# Ordem correta de destruição (REVERSA da criação: 05 → 00)
-echo "📋 Ordem de destruição: 05-monitoring → 04-security → 03-karpenter → 02-eks → 01-networking → 00-backend"
+# Ordem correta de destruição (REVERSA da criação: 02 → 00)
+echo "📋 Ordem de destruição: 02-eks-cluster → 01-networking → 00-backend"
 echo ""
-
-destroy_stack "Stack 05 - Monitoring (Grafana + Prometheus)" "05-monitoring"
-
-# CRÍTICO: Aguardar ENIs do Prometheus Scraper serem liberadas pela AWS
-echo "═══════════════════════════════════════════════════════════════════"
-echo "⏳ Aguardando liberação de ENIs do Prometheus Scraper..."
-echo "═══════════════════════════════════════════════════════════════════"
-echo "ℹ️  O Prometheus Scraper cria ENIs gerenciadas que levam ~5min para"
-echo "   serem liberadas pela AWS após o terraform destroy."
-echo ""
-
-MAX_WAIT=600  # 10 minutos
-INTERVAL=15   # Verificar a cada 15 segundos
-elapsed=0
-
-while [ $elapsed -lt $MAX_WAIT ]; do
-    # Verificar ENIs com tipo amp_collector (Prometheus)
-    ENI_COUNT=$(aws ec2 describe-network-interfaces \
-        --filters "Name=interface-type,Values=amp_collector" \
-        --query 'length(NetworkInterfaces)' \
-        --output text \
-        --profile terraform 2>/dev/null || echo "0")
-    
-    if [ "$ENI_COUNT" = "0" ]; then
-        echo "✅ Todas as ENIs do Prometheus foram liberadas!"
-        break
-    fi
-    
-    echo "  ⏳ Ainda há $ENI_COUNT ENI(s) do Prometheus... aguardando ${elapsed}s/${MAX_WAIT}s"
-    sleep $INTERVAL
-    elapsed=$((elapsed + INTERVAL))
-done
-
-if [ $elapsed -ge $MAX_WAIT ]; then
-    echo "⚠️  TIMEOUT: ENIs ainda não foram liberadas após ${MAX_WAIT}s"
-    echo "   Prosseguindo mesmo assim (pode causar erro na Stack 01 - VPC)"
-    echo "   Se VPC não deletar, aguarde mais 5min e execute:"
-    echo "   → ./cleanup-vpc-final.sh"
-else
-    echo "✅ Pronto para deletar recursos de rede!"
-fi
-echo ""
-
-# Stack 04: Remover WAF association do state (ALB já foi deletado via kubectl)
-echo "═══════════════════════════════════════════════════════════════════"
-echo "🧹 Stack 04: Limpando state de WAF association órfã..."
-echo "═══════════════════════════════════════════════════════════════════"
-cd "$PROJECT_ROOT/04-security"
-terraform state rm aws_wafv2_web_acl_association.alb 2>/dev/null && echo "  ✅ WAF association removida do state" || echo "  ℹ️  WAF association já removida ou não existe"
-terraform state rm data.aws_lb.eks 2>/dev/null && echo "  ✅ Data source ALB removido do state" || echo "  ℹ️  Data source já removido"
-echo ""
-
-destroy_stack "Stack 04 - Security (WAF)" "04-security"
-
-# Stack 03: Remover helm release do state (pode estar órfão se cluster foi destruído)
-echo "═══════════════════════════════════════════════════════════════════"
-echo "🧹 Stack 03: Limpando state de Karpenter helm release órfão..."
-echo "═══════════════════════════════════════════════════════════════════"
-cd "$PROJECT_ROOT/03-karpenter-auto-scaling"
-terraform state rm helm_release.karpenter 2>/dev/null && echo "  ✅ Karpenter helm release removido do state" || echo "  ℹ️  Helm release já removido ou não existe"
-echo ""
-
-destroy_stack "Stack 03 - Karpenter (Auto-scaling)" "03-karpenter-auto-scaling"
 
 # Stack 02: Remover helm releases do state (cluster inacessível após addons destruídos)
 echo "═══════════════════════════════════════════════════════════════════"
@@ -430,10 +364,6 @@ echo ""
 echo "📊 Recursos destruídos:"
 echo "  ✅ Namespace ecommerce + ALB (via kubectl)"
 echo "  ✅ Namespace sample-app (se existia)"
-echo "  ✅ kube-state-metrics (se existia)"
-echo "  ✅ Stack 05: Grafana + Prometheus"
-echo "  ✅ Stack 04: WAF Web ACL + Association"
-echo "  ✅ Stack 03: Karpenter + IAM Roles + Resources"
 echo "  ✅ Stack 02: EKS Cluster + Node Group + ALB Controller + External DNS"
 echo "  ✅ Stack 01: VPC + Subnets + NAT Gateways + EIPs"
 if [[ $destroy_backend =~ ^[Ss]$ ]]; then
@@ -447,5 +377,5 @@ if [[ ! $destroy_backend =~ ^[Ss]$ ]]; then
 echo "   (S3 + DynamoDB do backend: <$1/mês)"
 fi
 echo ""
-echo "🔄 Para recriar tudo: ./rebuild-all.sh"
+echo "🔄 Para recriar tudo: ./scripts/rebuild-all.sh"
 echo ""
