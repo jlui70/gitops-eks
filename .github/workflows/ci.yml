@@ -114,9 +114,6 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --image-scanning-configuration scanOnPush=true
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build and push Docker image
         env:
           ECR_REPOSITORY: ecommerce/${{ matrix.service }}
@@ -124,15 +121,16 @@ jobs:
         run: |
           echo "🏗️  Building ${{ matrix.service }}..."
           
-          # Simular build (já que não temos código fonte)
-          # Em produção, você teria: docker build -t $IMAGE_URI .
-          
-          # Por enquanto, vamos apenas puxar imagem pública e re-tagear
-          docker pull rslim087/${{ matrix.service }}:latest
+          # Puxar imagem pública (retry em caso de timeout)
+          echo "⬇️  Pulling from Docker Hub..."
+          docker pull rslim087/${{ matrix.service }}:latest || \
+          (sleep 10 && docker pull rslim087/${{ matrix.service }}:latest) || \
+          (sleep 20 && docker pull rslim087/${{ matrix.service }}:latest)
           
           IMAGE_URI="${{ env.ECR_REGISTRY }}/${ECR_REPOSITORY}:${IMAGE_TAG}"
           IMAGE_URI_LATEST="${{ env.ECR_REGISTRY }}/${ECR_REPOSITORY}:latest"
           
+          echo "🏷️  Tagging images..."
           docker tag rslim087/${{ matrix.service }}:latest $IMAGE_URI
           docker tag rslim087/${{ matrix.service }}:latest $IMAGE_URI_LATEST
           
