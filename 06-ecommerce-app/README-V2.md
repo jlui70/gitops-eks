@@ -270,3 +270,4 @@ kubectl patch service ecommerce-ui -n ecommerce --type merge -p '{"spec":{"selec
 ---
 
 ✅ **v2 pronta para demonstração CI/CD!**
+# Test change
