@@ -13,7 +13,9 @@ echo "║     🗑️  DESTRUINDO INFRAESTRUTURA EKS - 3 STACKS               �
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# PROJECT_ROOT deve apontar para o diretório raiz do projeto (gitops/), não scripts/
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Função para destruir uma stack
 destroy_stack() {
