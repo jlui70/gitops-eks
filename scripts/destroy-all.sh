@@ -44,6 +44,66 @@ destroy_stack() {
 
 # IMPORTANTE: Primeiro deletar recursos Kubernetes que criam recursos AWS
 echo "═══════════════════════════════════════════════════════════════════"
+echo "🧹 PASSO 0: Limpando recursos CI/CD (ECR + IAM)"
+echo "═══════════════════════════════════════════════════════════════════"
+echo ""
+
+# Deletar ECR repositories (criados manualmente para CI/CD)
+echo "🗑️  Deletando ECR repositories..."
+ECR_REPOS=(
+    "ecommerce/ecommerce-ui"
+    "ecommerce/product-catalog"
+    "ecommerce/order-management"
+    "ecommerce/product-inventory"
+    "ecommerce/profile-management"
+    "ecommerce/shipping-and-handling"
+    "ecommerce/contact-support-team"
+)
+
+for repo in "${ECR_REPOS[@]}"; do
+    if aws ecr describe-repositories --repository-names "$repo" --region us-east-1 --profile terraform &>/dev/null; then
+        echo "  🗑️  Deletando ECR repo: $repo"
+        aws ecr delete-repository --repository-name "$repo" --region us-east-1 --force --profile terraform 2>/dev/null && \
+            echo "    ✅ $repo deletado" || \
+            echo "    ⚠️  Erro ao deletar $repo"
+    fi
+done
+
+# Deletar IAM user github-actions-eks
+echo ""
+echo "🗑️  Deletando IAM user github-actions-eks..."
+if aws iam get-user --user-name github-actions-eks --profile terraform &>/dev/null; then
+    # Delete access keys
+    ACCESS_KEYS=$(aws iam list-access-keys --user-name github-actions-eks --profile terraform --query 'AccessKeyMetadata[].AccessKeyId' --output text 2>/dev/null)
+    for key in $ACCESS_KEYS; do
+        echo "  → Deletando access key: $key"
+        aws iam delete-access-key --user-name github-actions-eks --access-key-id "$key" --profile terraform 2>/dev/null || true
+    done
+    
+    # Detach managed policies
+    ATTACHED_POLICIES=$(aws iam list-attached-user-policies --user-name github-actions-eks --profile terraform --query 'AttachedPolicies[].PolicyArn' --output text 2>/dev/null)
+    for policy_arn in $ATTACHED_POLICIES; do
+        echo "  → Detaching policy: $(basename $policy_arn)"
+        aws iam detach-user-policy --user-name github-actions-eks --policy-arn "$policy_arn" --profile terraform 2>/dev/null || true
+    done
+    
+    # Delete inline policies
+    INLINE_POLICIES=$(aws iam list-user-policies --user-name github-actions-eks --profile terraform --query 'PolicyNames' --output text 2>/dev/null)
+    for policy_name in $INLINE_POLICIES; do
+        echo "  → Deletando inline policy: $policy_name"
+        aws iam delete-user-policy --user-name github-actions-eks --policy-name "$policy_name" --profile terraform 2>/dev/null || true
+    done
+    
+    # Delete user
+    aws iam delete-user --user-name github-actions-eks --profile terraform 2>/dev/null && \
+        echo "  ✅ IAM user github-actions-eks deletado" || \
+        echo "  ⚠️  Erro ao deletar IAM user"
+else
+    echo "  ℹ️  IAM user github-actions-eks não encontrado"
+fi
+
+echo ""
+echo "═══════════════════════════════════════════════════════════════════"
 echo "🧹 PASSO 1: Deletando recursos Kubernetes (Ingress → ALB)"
 echo "═══════════════════════════════════════════════════════════════════"
 echo ""
@@ -362,6 +422,8 @@ echo "║              ✅ DESTRUIÇÃO COMPLETA!                            ║
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""
 echo "📊 Recursos destruídos:"
+echo "  ✅ ECR Repositories (7 repos)"
+echo "  ✅ IAM user github-actions-eks"
 echo "  ✅ Namespace ecommerce + ALB (via kubectl)"
 echo "  ✅ Namespace sample-app (se existia)"
 echo "  ✅ Stack 02: EKS Cluster + Node Group + ALB Controller + External DNS"
