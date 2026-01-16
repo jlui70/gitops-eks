@@ -25,12 +25,14 @@ on:
           - rolling
           - canary
 
-  workflow_run:
-    workflows: ["CI - Build and Test"]
-    types:
-      - completed
-    branches:
-      - main
+  # CD Automático desabilitado - Deploy manual via GitHub Actions UI
+  # Para habilitar CD automático após CI, descomente as linhas abaixo:
+  # workflow_run:
+  #   workflows: ["CI - Build and Test"]
+  #   types:
+  #     - completed
+  #   branches:
+  #     - main
 
 env:
   AWS_REGION: us-east-1
