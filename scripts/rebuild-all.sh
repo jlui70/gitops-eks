@@ -55,6 +55,21 @@ aws eks update-kubeconfig --name eks-devopsproject-cluster --region us-east-1
 echo "✅ kubectl configurado"
 echo ""
 
+# Configurar aws-auth para GitHub Actions
+echo "═══════════════════════════════════════════════════════════════════"
+echo "🔐 Configurando acesso GitHub Actions ao cluster"
+echo "═══════════════════════════════════════════════════════════════════"
+
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+kubectl get configmap aws-auth -n kube-system -o yaml | grep -q "github-actions-eks" || {
+    echo "Adicionando usuário github-actions-eks ao aws-auth..."
+    kubectl patch configmap aws-auth -n kube-system --type merge -p "{\"data\":{\"mapUsers\":\"- userarn: arn:aws:iam::${ACCOUNT_ID}:user/github-actions-eks\n  username: github-actions-eks\n  groups:\n  - system:masters\n\"}}"
+    echo "✅ Usuário github-actions-eks configurado"
+}
+
+echo ""
+
 # Criar recursos Kubernetes de teste (opcional)
 echo "═══════════════════════════════════════════════════════════════════"
 echo "🧪 Recursos de Teste (Opcional)"
