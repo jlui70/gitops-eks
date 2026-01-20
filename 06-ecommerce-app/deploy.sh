@@ -3,6 +3,10 @@
 # Script de Deploy da Aplicação E-commerce
 # EKS DevOps Project - Microservices Demo
 
+# Ir para o diretório do script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 echo "🚀 Iniciando deploy da aplicação E-commerce..."
 echo "=========================================="
 
