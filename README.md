@@ -114,10 +114,9 @@ ALB_URL=$(kubectl get ingress ecommerce-ingress -n ecommerce \
   -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
 echo "http://$ALB_URL"
+```
 
----
-
-## 🔄 Workflows GitHub Actions
+### 🔄 Workflows GitHub Actions
 
 ### CI - Build and Test
 
@@ -158,7 +157,7 @@ echo "http://$ALB_URL"
 
 ---
 
-## 🛡️ Segurança
+### 🛡️ Segurança
 
 ### IAM (AWS)
 
