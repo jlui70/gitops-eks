@@ -143,13 +143,13 @@ jobs:
             echo "⚠️  Image not found in ECR, pulling from Docker Hub..."
             
             # Puxar imagem pública (retry em caso de timeout)
-            docker pull rslim087/${{ matrix.service }}:latest || \
-            (sleep 10 && docker pull rslim087/${{ matrix.service }}:latest) || \
-            (sleep 20 && docker pull rslim087/${{ matrix.service }}:latest)
+            docker pull luiz7030/${{ matrix.service }}:latest || \
+            (sleep 10 && docker pull luiz7030/${{ matrix.service }}:latest) || \
+            (sleep 20 && docker pull luiz7030/${{ matrix.service }}:latest)
             
             echo "🏷️  Tagging images..."
-            docker tag rslim087/${{ matrix.service }}:latest $IMAGE_URI
-            docker tag rslim087/${{ matrix.service }}:latest $IMAGE_URI_LATEST
+            docker tag luiz7030/${{ matrix.service }}:latest $IMAGE_URI
+            docker tag luiz7030/${{ matrix.service }}:latest $IMAGE_URI_LATEST
             
             echo "📤 Pushing to ECR..."
             docker push $IMAGE_URI
