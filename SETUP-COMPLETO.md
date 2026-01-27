@@ -62,39 +62,42 @@ aws sts get-caller-identity
 
 ## 🏗️ PASSO 3: PROVISIONAR INFRAESTRUTURA AWS
 
-### 3.1. Criar Backend Terraform (S3 + DynamoDB)
+### Opção Recomendada: Script Automatizado
 
 ```bash
-cd 00-backend
-terraform init
-terraform plan
-terraform apply -auto-approve
-cd ..
-```
-
-### 3.2. Criar Networking (VPC, Subnets, NAT Gateways)
-
-```bash
-cd 01-networking
-terraform init
-terraform plan
-terraform apply -auto-approve
-cd ..
-```
-
-### 3.3. Criar EKS Cluster
-
-```bash
-cd 02-eks-cluster
-terraform init
-terraform plan
-terraform apply -auto-approve
-cd ..
+# Provisiona TUDO de uma vez (Backend + Networking + EKS)
+./scripts/rebuild-all.sh
 ```
 
 ⏱️ **Tempo total:** ~20-25 minutos
 
-### 3.4. Configurar kubectl
+O script cria automaticamente:
+- ✅ Stack 00: Backend (S3 + DynamoDB)
+- ✅ Stack 01: Networking (VPC + Subnets + NAT Gateways)
+- ✅ Stack 02: EKS Cluster (Cluster + Node Group + ALB Controller)
+
+### Opção Manual (Passo a Passo)
+
+Se preferir executar manualmente:
+
+```bash
+# 1. Backend
+cd 00-backend
+terraform init && terraform apply -auto-approve
+cd ..
+
+# 2. Networking
+cd 01-networking
+terraform init && terraform apply -auto-approve
+cd ..
+
+# 3. EKS Cluster
+cd 02-eks-cluster
+terraform init && terraform apply -auto-approve
+cd ..
+```
+
+### Configurar kubectl
 
 ```bash
 aws eks update-kubeconfig \
@@ -126,13 +129,15 @@ docker login -u seu-usuario
 **OPÇÃO A - Usar Imagens Existentes (Mais Rápido):**
 
 ```bash
-# Pull das imagens públicas
+# Pull das imagens do repositório de referência
 for service in ecommerce-ui product-catalog order-management product-inventory profile-management shipping-and-handling contact-support-team; do
-  docker pull rslim087/$service:latest
-  docker tag rslim087/$service:latest seu-usuario/$service:latest
+  docker pull luiz7030/$service:latest
+  docker tag luiz7030/$service:latest seu-usuario/$service:latest
   docker push seu-usuario/$service:latest
 done
 ```
+
+⚠️ **Nota:** Usamos `luiz7030` como repositório de referência. Se essas imagens não estiverem disponíveis no futuro, use a OPÇÃO B (build local).
 
 **OPÇÃO B - Build Local (Se tiver os Dockerfiles):**
 
