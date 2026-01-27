@@ -63,9 +63,9 @@ ECR_REPOS=(
 )
 
 for repo in "${ECR_REPOS[@]}"; do
-    if aws ecr describe-repositories --repository-names "$repo" --region us-east-1 --profile terraform &>/dev/null; then
+    if aws ecr describe-repositories --repository-names "$repo" --region us-east-1 &>/dev/null; then
         echo "  🗑️  Deletando ECR repo: $repo"
-        aws ecr delete-repository --repository-name "$repo" --region us-east-1 --force --profile terraform 2>/dev/null && \
+        aws ecr delete-repository --repository-name "$repo" --region us-east-1 --force 2>/dev/null && \
             echo "    ✅ $repo deletado" || \
             echo "    ⚠️  Erro ao deletar $repo"
     fi
@@ -74,30 +74,30 @@ done
 # Deletar IAM user github-actions-eks
 echo ""
 echo "🗑️  Deletando IAM user github-actions-eks..."
-if aws iam get-user --user-name github-actions-eks --profile terraform &>/dev/null; then
+if aws iam get-user --user-name github-actions-eks &>/dev/null; then
     # Delete access keys
-    ACCESS_KEYS=$(aws iam list-access-keys --user-name github-actions-eks --profile terraform --query 'AccessKeyMetadata[].AccessKeyId' --output text 2>/dev/null)
+    ACCESS_KEYS=$(aws iam list-access-keys --user-name github-actions-eks --query 'AccessKeyMetadata[].AccessKeyId' --output text 2>/dev/null)
     for key in $ACCESS_KEYS; do
         echo "  → Deletando access key: $key"
-        aws iam delete-access-key --user-name github-actions-eks --access-key-id "$key" --profile terraform 2>/dev/null || true
+        aws iam delete-access-key --user-name github-actions-eks --access-key-id "$key" 2>/dev/null || true
     done
     
     # Detach managed policies
-    ATTACHED_POLICIES=$(aws iam list-attached-user-policies --user-name github-actions-eks --profile terraform --query 'AttachedPolicies[].PolicyArn' --output text 2>/dev/null)
+    ATTACHED_POLICIES=$(aws iam list-attached-user-policies --user-name github-actions-eks --query 'AttachedPolicies[].PolicyArn' --output text 2>/dev/null)
     for policy_arn in $ATTACHED_POLICIES; do
         echo "  → Detaching policy: $(basename $policy_arn)"
-        aws iam detach-user-policy --user-name github-actions-eks --policy-arn "$policy_arn" --profile terraform 2>/dev/null || true
+        aws iam detach-user-policy --user-name github-actions-eks --policy-arn "$policy_arn" 2>/dev/null || true
     done
     
     # Delete inline policies
-    INLINE_POLICIES=$(aws iam list-user-policies --user-name github-actions-eks --profile terraform --query 'PolicyNames' --output text 2>/dev/null)
+    INLINE_POLICIES=$(aws iam list-user-policies --user-name github-actions-eks --query 'PolicyNames' --output text 2>/dev/null)
     for policy_name in $INLINE_POLICIES; do
         echo "  → Deletando inline policy: $policy_name"
-        aws iam delete-user-policy --user-name github-actions-eks --policy-name "$policy_name" --profile terraform 2>/dev/null || true
+        aws iam delete-user-policy --user-name github-actions-eks --policy-name "$policy_name" 2>/dev/null || true
     done
     
     # Delete user
-    aws iam delete-user --user-name github-actions-eks --profile terraform 2>/dev/null && \
+    aws iam delete-user --user-name github-actions-eks 2>/dev/null && \
         echo "  ✅ IAM user github-actions-eks deletado" || \
         echo "  ⚠️  Erro ao deletar IAM user"
 else
