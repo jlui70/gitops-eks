@@ -79,55 +79,27 @@ Este projeto demonstra uma **pipeline GitOps completa** para deploy automatizado
 
 Siga o guia detalhado de configuração:
 
-📚 **[Configuração Inicial](./docs/Configuração-inicial.md)**
+📚 **[Configuração Inicial](./SETUP-COMPLETO.md)**
 
 Este guia cobre:
 - Configuração AWS CLI e credenciais
 - Setup Terraform backend
 - Criação de IAM roles necessárias
-- Configuração Route53 (se usar domínio próprio)
+- Configuração Docker Hub
+- Configuração GitHub Actions
+- Repositórios ECR
 
 ### 2. Deploy da Infraestrutura
+
+Este script provisiona automáticamente via Terraform todas as stacks de infraestrutura necessárias para o projeto. Antes de executar o script rebuild-all.sh siga as orientações do guia de configuração inicial. 
 
 ```bash
 # Deploy automatizado (20-25 min)
 ./scripts/rebuild-all.sh
 ```
 
-**O script provisiona:**
-- Stack 00: Backend (S3 + DynamoDB)
-- Stack 01: Networking (VPC + Subnets + NAT Gateways)
-- Stack 02: EKS Cluster (Cluster + Node Group + ALB Controller)
 
-### 3. Configurar GitHub Actions
-
-**3.1. Criar repositório GitHub**
-```bash
-git remote add origin https://github.com/SEU-USUARIO/gitops-eks.git
-git push -u origin main
-```
-
-**3.2. Configurar GitHub Environment Secrets**
-
-Navegue: `Settings → Environments → New environment (production)`
-
-Adicione os secrets:
-```
-AWS_ACCESS_KEY_ID: AKIA...
-AWS_SECRET_ACCESS_KEY: ****
-AWS_ACCOUNT_ID: 794038226274
-```
-
-📚 **[Setup Completo - Clique aqui](./SETUP-COMPLETO.md)** para configurar o projeto do zero no seu ambiente
-
-### 4. Deploy da Aplicação
-
-```bash
-cd 06-ecommerce-app
-./deploy.sh
-```
-
-### 5. Validar Deployment
+### 3. Validar Deployment
 
 ```bash
 # Ver pods
@@ -142,10 +114,6 @@ ALB_URL=$(kubectl get ingress ecommerce-ingress -n ecommerce \
   -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
 echo "http://$ALB_URL"
-
-# Via domínio (se configurado)
-curl http://eks.devopsproject.com.br
-```
 
 ---
 
@@ -307,18 +275,12 @@ Rollback (<30s):
 
 ---
 
-## 📚 Documentação
-
-### Guias Principais
-
-- 📖 **[Configuração Inicial](./docs/Configuração-inicial.md)** - Setup AWS, Terraform, kubectl
-- 🚀 **[CI/CD Pipeline](./docs/CI-CD-PIPELINE.md)** - Guia completo GitHub Actions
-
----
-
 ## 🙏 Créditos
 
 Infraestrutura base inspirada no trabalho de **[Kenerry Serain](https://github.com/kenerry-serain)**.
+
+Ecommerece-app desenvolvido por **Rayan Slim**
+- 📹 **Canal YouTube:** [@RayanSlim087](https://www.youtube.com/@RayanLabs)
 
 Pipeline GitOps e CI/CD desenvolvidos como evolução do projeto original.
 
