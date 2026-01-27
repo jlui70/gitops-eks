@@ -118,10 +118,7 @@ AWS_SECRET_ACCESS_KEY: ****
 AWS_ACCOUNT_ID: 794038226274
 ```
 
-📚 **Documentação:**
-- **[Setup Completo](./docs/SETUP-COMPLETO.md)** - Como configurar do zero no seu ambiente
-- **[Guia de Apresentação](./GUIA-APRESENTACAO.md)** - Roteiro para demonstração CI/CD
-- **[CI/CD Pipeline](./docs/CI-CD-PIPELINE.md)** - Detalhes dos workflows
+📚 **[Setup Completo - Clique aqui](./SETUP-COMPLETO.md)** para configurar o projeto do zero no seu ambiente
 
 ### 4. Deploy da Aplicação
 
