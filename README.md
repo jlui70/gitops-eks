@@ -12,18 +12,27 @@
 
 ---
 
-## 🎯 Visão Geral
+## 📋 Sobre o Projeto
 
-Este projeto demonstra uma **pipeline GitOps completa** para deploy automatizado em Kubernetes (Amazon EKS) utilizando as melhores práticas de DevOps moderno:
+Este projeto apresenta uma implementação completa de GitOps para Kubernetes utilizando Amazon EKS, demonstrando como automatizar deployments com zero downtime através de práticas modernas de CI/CD e Blue/Green Deployment.
 
-- ✅ **CI/CD com GitHub Actions** - Pipelines automatizados (CI, CD, Rollback)
-- ✅ **Blue/Green Deployment** - Zero downtime e rollback < 30 segundos
-- ✅ **Infraestrutura como Código** - 3 stacks Terraform modulares
-- ✅ **Container Registry** - Amazon ECR para images Docker
-- ✅ **Segurança** - IAM + RBAC + GitHub Environment Secrets
-- ✅ **Aplicação Demo** - E-commerce com 7 microserviços
-- ✅ **Ingress Controller** - AWS Load Balancer Controller
-- ✅ **DNS Automático** - External DNS com Route53
+Para validar a solução, implementei uma pipeline completa de GitOps onde:
+
+🔄 **GitHub Actions** orquestra todo o fluxo de CI/CD automatizado
+🏗️ **Terraform** provisiona a infraestrutura completa na AWS (VPC, EKS, IAM, ECR)
+🎯 **Objetivo**: Demonstrar uma pipeline production-ready com deploy automatizado, estratégia Blue/Green e rollback rápido
+
+**🔄 Fluxo GitOps Implementado**
+
+**Build & Test**: Ao fazer push no repositório, o GitHub Actions valida manifestos, constrói imagens Docker dos 7 microserviços e envia para o Amazon ECR
+
+**Deploy Blue/Green**: A pipeline de CD provisiona a nova versão (v2) em paralelo à versão atual (v1), executa health checks e aguarda aprovação manual
+
+**Traffic Switch**: Após validação, o tráfego é redirecionado para a nova versão através do Service Selector, garantindo zero downtime
+
+**Rollback**: Em caso de problemas, o rollback para a versão anterior é executado em menos de 30 segundos
+
+✅ **Resultado**: A implementação demonstra um pipeline GitOps completo e resiliente, utilizando Terraform, GitHub Actions, Amazon EKS, AWS Load Balancer Controller e External DNS para automação end-to-end de deployments Kubernetes.
 
 ---
 
