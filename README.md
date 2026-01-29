@@ -1,7 +1,7 @@
 # GitOps Pipeline - EKS com CI/CD Completo
 
 <p align="center">
-  <img src="gitops-eks.png" alt="GitOps EKS Architecture" />
+  <img src="Diagrama completo gitops-eks.png" alt="GitOps EKS Architecture" />
 </p>
 
 <p align="center">
