@@ -1,6 +1,10 @@
 # GitOps Pipeline - EKS com CI/CD Completo
 
 <p align="center">
+  <img src="gitops-eks.png" alt="GitOps EKS Architecture" />
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/GitOps-Enabled-00ADD8?style=for-the-badge&logo=git&logoColor=white" />
   <img src="https://img.shields.io/badge/CI/CD-GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" />
   <img src="https://img.shields.io/badge/IaC-Terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white" />
