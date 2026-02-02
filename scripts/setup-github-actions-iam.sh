@@ -45,7 +45,13 @@ POLICY_DOC=$(cat <<EOF
     {
       "Effect": "Allow",
       "Action": [
-        "ecr:GetAuthorizationToken",
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
@@ -54,9 +60,12 @@ POLICY_DOC=$(cat <<EOF
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload",
         "ecr:DescribeRepositories",
-        "ecr:ListImages"
+        "ecr:CreateRepository",
+        "ecr:DescribeImages",
+        "ecr:ListImages",
+        "ecr:StartImageScan"
       ],
-      "Resource": "*"
+      "Resource": "arn:aws:ecr:*:${AWS_ACCOUNT_ID}:repository/ecommerce/*"
     },
     {
       "Effect": "Allow",

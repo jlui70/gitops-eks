@@ -287,7 +287,72 @@ Rollback (<30s):
 
 ---
 
-## 🙏 Créditos
+## � Troubleshooting
+
+### CI/CD Failures
+
+**❌ Problema:** GitHub Actions CI falha com erro "exit code 254" no build das imagens
+
+**✅ Solução:**
+```bash
+# Verificar se as permissões ECR estão corretas
+aws iam list-attached-user-policies --user-name github-actions-eks
+
+# Se não aparecer GitHubActionsEKSPolicy, execute:
+cd scripts
+./setup-github-actions-iam.sh
+```
+
+A policy deve incluir permissões de:
+- `ecr:GetAuthorizationToken`
+- `ecr:CreateRepository`
+- `ecr:PutImage`, `ecr:BatchGetImage`, etc.
+- `ecr:StartImageScan`
+
+**❌ Problema:** CI não dispara após push
+
+**✅ Solução:** O CI só dispara para mudanças em:
+- Arquivos dentro de `06-ecommerce-app/**`
+- `.github/workflows/ci.yml`
+
+Mudanças no README.md raiz não disparam o CI.
+
+**❌ Problema:** CD requer aprovação mas não inicia
+
+**✅ Solução:** Verifique se o environment "production" está configurado:
+1. GitHub → Settings → Environments
+2. Crie "production" se não existir
+3. Configure os secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ACCOUNT_ID`
+
+### Terraform Issues
+
+**❌ Problema:** `terraform apply` falha com erro de state lock
+
+**✅ Solução:**
+```bash
+# Verificar locks no DynamoDB
+aws dynamodb scan --table-name terraform-state-lock
+
+# Forçar unlock (use com cuidado!)
+terraform force-unlock <LOCK_ID>
+```
+
+### Kubernetes Issues
+
+**❌ Problema:** `kubectl` não conecta ao cluster
+
+**✅ Solução:**
+```bash
+# Atualizar kubeconfig
+aws eks update-kubeconfig --name eks-devopsproject-cluster --region us-east-1
+
+# Verificar conectividade
+kubectl cluster-info
+```
+
+---
+
+## �🙏 Créditos
 
 Infraestrutura base inspirada no trabalho de **[Kenerry Serain](https://github.com/kenerry-serain)**.
 

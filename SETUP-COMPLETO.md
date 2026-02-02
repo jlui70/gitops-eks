@@ -159,6 +159,11 @@ cd scripts
 ./setup-github-actions-iam.sh
 ```
 
+**O script cria automaticamente:**
+- ✅ IAM User: `github-actions-eks`
+- ✅ Policy com permissões EKS + ECR (incluindo CreateRepository e StartImageScan)
+- ✅ Access Keys para GitHub Actions
+
 **O script vai gerar 3 credenciais. COPIE e GUARDE:**
 
 ```
@@ -168,6 +173,8 @@ AWS_ACCOUNT_ID: 123456789012
 ```
 
 ⚠️ **ATENÇÃO:** Essas credenciais aparecem apenas UMA VEZ!
+
+> 💡 **Nota sobre permissões ECR:** O script já inclui todas as permissões necessárias para ECR (push/pull de imagens, criar repositórios, scan de vulnerabilidades). Não é necessário adicionar policies adicionais.
 
 ---
 
