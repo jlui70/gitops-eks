@@ -334,3 +334,4 @@ MIT License - Veja [LICENSE](LICENSE) para detalhes.
 **Desenvolvido com ❤️ para a comunidade DevOps brasileira**
 
 </div>
+trigger CI
