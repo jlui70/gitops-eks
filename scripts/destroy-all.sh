@@ -104,6 +104,30 @@ else
     echo "  ℹ️  IAM user github-actions-eks não encontrado"
 fi
 
+# Deletar policies órfãs do GitHub Actions
+echo ""
+echo "🗑️  Deletando IAM policies órfãs do GitHub Actions..."
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text 2>/dev/null || echo "")
+if [ -n "$ACCOUNT_ID" ]; then
+    # GitHubActionsEKSPolicy
+    POLICY_ARN="arn:aws:iam::${ACCOUNT_ID}:policy/GitHubActionsEKSPolicy"
+    if aws iam get-policy --policy-arn "$POLICY_ARN" &>/dev/null; then
+        echo "  → Deletando policy: GitHubActionsEKSPolicy"
+        aws iam delete-policy --policy-arn "$POLICY_ARN" 2>/dev/null && \
+            echo "    ✅ GitHubActionsEKSPolicy deletada" || \
+            echo "    ⚠️  Erro ao deletar GitHubActionsEKSPolicy"
+    fi
+    
+    # GitHubActionsECRPolicy
+    POLICY_ARN="arn:aws:iam::${ACCOUNT_ID}:policy/GitHubActionsECRPolicy"
+    if aws iam get-policy --policy-arn "$POLICY_ARN" &>/dev/null; then
+        echo "  → Deletando policy: GitHubActionsECRPolicy"
+        aws iam delete-policy --policy-arn "$POLICY_ARN" 2>/dev/null && \
+            echo "    ✅ GitHubActionsECRPolicy deletada" || \
+            echo "    ⚠️  Erro ao deletar GitHubActionsECRPolicy"
+    fi
+fi
+
 echo ""
 echo "═══════════════════════════════════════════════════════════════════"
 echo "🧹 PASSO 1: Deletando recursos Kubernetes (Ingress → ALB)"
@@ -425,7 +449,7 @@ echo "╚═══════════════════════�
 echo ""
 echo "📊 Recursos destruídos:"
 echo "  ✅ ECR Repositories (7 repos)"
-echo "  ✅ IAM user github-actions-eks"
+echo "  ✅ IAM user github-actions-eks + policies (GitHubActionsEKSPolicy, GitHubActionsECRPolicy)"
 echo "  ✅ Namespace ecommerce + ALB (via kubectl)"
 echo "  ✅ Namespace sample-app (se existia)"
 echo "  ✅ Stack 02: EKS Cluster + Node Group + ALB Controller + External DNS"
