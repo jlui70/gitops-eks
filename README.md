@@ -23,7 +23,9 @@ Este projeto apresenta uma implementação completa de GitOps para Kubernetes ut
 Para validar a solução, implementei uma pipeline completa de GitOps onde:
 
 🔄 **GitHub Actions** orquestra todo o fluxo de CI/CD automatizado
+
 🏗️ **Terraform** provisiona a infraestrutura completa na AWS (VPC, EKS, IAM, ECR)
+
 🎯 **Objetivo**: Demonstrar uma pipeline production-ready com deploy automatizado, estratégia Blue/Green e rollback rápido
 
 **🔄 Fluxo GitOps Implementado**
