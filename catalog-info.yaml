@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gitops-eks
+  description: GitOps production-ready para AWS EKS com Terraform, GitHub Actions
+    e Blue/Green deployment. Pipeline CI/CD automatizada com 7 microservicos, zero
+    downtime e rollback em 30s.
+spec:
+  type: infrastructure
+  lifecycle: experimental
+  owner: group:default/platform-admins
